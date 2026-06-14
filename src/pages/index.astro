@@ -1,0 +1,99 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Socials from "../components/Socials.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import { site } from "../data/site";
+import { projects } from "../data/projects";
+
+const focus = [
+  "LLM-powered analysis",
+  "Quant & fundamentals",
+  "Self-hosted infra",
+  "Shipping in public",
+];
+---
+
+<Layout>
+  <!-- Hero -->
+  <section class="mx-auto max-w-5xl px-6 pt-20 pb-16 sm:pt-28">
+    <p class="eyebrow mb-5">Data Scientist · building in public</p>
+    <h1 class="max-w-3xl text-4xl font-semibold leading-[1.05] text-fog-100 sm:text-6xl">
+      I turn messy data into
+      <span class="relative whitespace-nowrap text-beacon">
+        decisions you can act on
+        <span
+          class="absolute -bottom-1 left-0 h-px w-full bg-gradient-to-r from-beacon/0 via-beacon to-beacon/0"
+        ></span>
+      </span>.
+    </h1>
+    <p class="mt-6 max-w-2xl text-lg leading-relaxed text-fog-300">
+      I'm <span class="text-fog-100">{site.name}</span> — {site.tagline}
+      From investment theses to auction hunts, I design and ship AI-driven tools end to end.
+    </p>
+
+    <div class="mt-9 flex flex-wrap items-center gap-4">
+      <a
+        href="#work"
+        class="rounded-full bg-beacon px-5 py-2.5 text-sm font-semibold text-ink-950 transition-colors hover:bg-beacon-600"
+      >
+        See my work
+      </a>
+      <a
+        href="/cv"
+        class="rounded-full border border-line bg-ink-800 px-5 py-2.5 text-sm font-medium text-fog-100 transition-colors hover:border-beacon/50 hover:text-beacon"
+      >
+        Read the CV
+      </a>
+      <div class="pl-1"><Socials /></div>
+    </div>
+
+    <div class="mt-12 flex flex-wrap gap-2">
+      {
+        focus.map((f) => (
+          <span class="rounded-full border border-line bg-ink-850/60 px-3 py-1 font-mono text-xs text-fog-300">
+            {f}
+          </span>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- Work -->
+  <section id="work" class="mx-auto max-w-5xl scroll-mt-24 px-6 py-16">
+    <div class="mb-8 flex items-end justify-between gap-4">
+      <div>
+        <p class="eyebrow mb-2">// portfolio</p>
+        <h2 class="text-2xl font-semibold text-fog-100 sm:text-3xl">Selected work</h2>
+      </div>
+      <p class="hidden max-w-xs text-right text-sm text-fog-400 sm:block">
+        A small set today, growing fast. Each one is something I'm actually running.
+      </p>
+    </div>
+
+    <div class="grid gap-5 sm:grid-cols-2">
+      {projects.map((project) => <ProjectCard project={project} />)}
+    </div>
+  </section>
+
+  <!-- Contact strip -->
+  <section class="mx-auto max-w-5xl px-6 py-16">
+    <div
+      class="flex flex-col items-start justify-between gap-6 rounded-2xl border border-line bg-gradient-to-br from-ink-850 to-ink-900 p-8 sm:flex-row sm:items-center"
+    >
+      <div>
+        <h2 class="text-2xl font-semibold text-fog-100">Let's build something.</h2>
+        <p class="mt-2 text-fog-400">Open to interesting data problems and collaborations.</p>
+      </div>
+      {
+        site.email && (
+          <a
+            href={`mailto:${site.email}`}
+            class="rounded-full bg-beacon px-5 py-2.5 text-sm font-semibold text-ink-950 transition-colors hover:bg-beacon-600"
+          >
+            Say hello
+          </a>
+        )
+      }
+    </div>
+  </section>
+</Layout>

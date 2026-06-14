@@ -1,0 +1,68 @@
+---
+import type { Project } from "../data/projects";
+interface Props {
+  project: Project;
+}
+const { project } = Astro.props;
+
+const statusStyles: Record<Project["status"], string> = {
+  live: "border-aqua/40 text-aqua",
+  building: "border-beacon/40 text-beacon",
+  soon: "border-line text-fog-400",
+};
+const statusLabel: Record<Project["status"], string> = {
+  live: "Live",
+  building: "Building",
+  soon: "Coming soon",
+};
+const Tag = project.href ? "a" : "div";
+---
+
+<Tag
+  href={project.href}
+  target={project.href ? "_blank" : undefined}
+  rel={project.href ? "noopener" : undefined}
+  class="card-hover group relative flex flex-col rounded-2xl border border-line bg-ink-850/70 p-6"
+>
+  <div class="mb-3 flex items-center justify-between gap-3">
+    <h3 class="font-mono text-lg lowercase text-fog-100">{project.name}</h3>
+    <span
+      class={`rounded-full border px-2.5 py-0.5 text-[0.7rem] font-medium ${statusStyles[project.status]}`}
+    >
+      {statusLabel[project.status]}
+    </span>
+  </div>
+
+  <p class="text-sm font-medium text-fog-200">{project.tagline}</p>
+  <p class="mt-2 flex-1 text-sm leading-relaxed text-fog-400">{project.description}</p>
+
+  <div class="mt-4 flex flex-wrap gap-1.5">
+    {
+      project.tags.map((t) => (
+        <span class="rounded-md bg-ink-800 px-2 py-0.5 font-mono text-[0.7rem] text-fog-300">
+          {t}
+        </span>
+      ))
+    }
+  </div>
+
+  {
+    project.href && (
+      <span class="mt-5 inline-flex items-center gap-1.5 text-sm text-beacon">
+        Visit
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          class="transition-transform group-hover:translate-x-0.5"
+          aria-hidden="true"
+        >
+          <path d="M5 12h14M13 6l6 6-6 6" />
+        </svg>
+      </span>
+    )
+  }
+</Tag>

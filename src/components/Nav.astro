@@ -1,0 +1,41 @@
+---
+import { site } from "../data/site";
+const links = [
+  { href: "/#work", label: "Work" },
+  { href: "/writing", label: "Writing" },
+  { href: "/cv", label: "CV" },
+];
+---
+
+<header class="sticky top-0 z-50 border-b border-line/60 bg-ink-950/70 backdrop-blur-md">
+  <nav class="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+    <a href="/" class="group flex items-center gap-2.5" aria-label="faro — home">
+      <span
+        class="relative grid h-7 w-7 place-items-center rounded-md border border-line bg-ink-800"
+      >
+        <span class="h-2 w-2 rounded-full bg-beacon shadow-[0_0_12px_3px_var(--color-beacon)]"></span>
+      </span>
+      <span class="font-mono text-sm tracking-widest text-fog-200 lowercase">faro</span>
+    </a>
+
+    <div class="flex items-center gap-6 text-sm text-fog-300">
+      {
+        links.map((l) => (
+          <a href={l.href} class="link-underline hover:text-fog-100">
+            {l.label}
+          </a>
+        ))
+      }
+      {
+        site.email && (
+          <a
+            href={`mailto:${site.email}`}
+            class="hidden rounded-full border border-line bg-ink-800 px-3.5 py-1.5 text-fog-100 transition-colors hover:border-beacon/50 hover:text-beacon sm:inline-block"
+          >
+            Get in touch
+          </a>
+        )
+      }
+    </div>
+  </nav>
+</header>

@@ -1,0 +1,14 @@
+---
+import { site } from "../data/site";
+import Socials from "./Socials.astro";
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-line/60 bg-ink-950/60">
+  <div
+    class="mx-auto flex max-w-5xl flex-col items-center justify-between gap-4 px-6 py-8 text-sm text-fog-400 sm:flex-row"
+  >
+    <p>© {year} {site.name} · built with Astro, guided by a <span class="text-beacon">faro</span>.</p>
+    <Socials />
+  </div>
+</footer>
