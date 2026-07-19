@@ -2,30 +2,127 @@
 import Layout from "../layouts/Layout.astro";
 import { site } from "../data/site";
 
-// TODO: replace placeholder content with your real CV.
+const summary =
+  "Data scientist and AI engineer with end-to-end ownership of production AI systems: architecture, key technical decisions, deployment and operation. Nearly four years shipping ML, NLP and Generative AI for clients in energy, insurance, SaaS, legal tech and medical imaging (US DoD-funded research). Experienced deploying open-source LLMs on private infrastructure and building agentic pipelines with LangChain and LangGraph. Outside client work I design, build and operate my own AI products end to end at manapple.dev.";
+
 const experience = [
   {
-    role: "Data Scientist",
-    org: "TODO — Company",
-    period: "2023 — Present",
-    points: [
-      "TODO: a result you're proud of, with a number.",
-      "TODO: a system or model you built and shipped.",
+    role: "AI & Machine Learning Engineer · AI Consultant",
+    org: "WhiteBoxML",
+    period: "Madrid · Sept 2022 — Present",
+    summary:
+      "End-to-end technical ownership of production AI systems for enterprise clients: architecture, delivery and functional leadership. Coordinated and mentored engineers, defining quality standards for ML, NLP and GenAI systems built for scalability, maintainability and business value.",
+    clients: [
+      {
+        name: "Iberdrola — renewable-energy forecasting (AWS)",
+        points: [
+          "Designed distributed ML pipelines forecasting output for 200+ renewable plants across the US, Spain and the UK, ingesting 2 TB of data daily.",
+          "Built ingestion and normalization of meteorological data from ECMWF, GFS and WRF, engineered for reproducibility and robustness in production.",
+        ],
+      },
+      {
+        name: "Intermundial — LLM claims automation",
+        points: [
+          "Architected LangChain/LangGraph pipelines for hierarchical document classification and information extraction, reaching over 90% accuracy on identity fields (DNI, NIE, passport).",
+          "Built an LLM-as-judge evaluation framework and deployed open-source LLMs on private infrastructure under data-privacy constraints.",
+        ],
+      },
+      {
+        name: "Nexudus — predictive models & GenAI (SaaS)",
+        points: [
+          "Churn-prediction and occupancy-forecasting models driving retention, pricing and capacity decisions.",
+          "Led the Generative-AI workflows behind automated content for the Flexspace Observatory blog.",
+        ],
+      },
+      {
+        name: "Bid Genius — LLM assistant for public tendering",
+        points: [
+          "Early-stage build of a proprietary LLM tool for assisted generation of tender documentation — solving long-document coherence and context management.",
+        ],
+      },
+      {
+        name: "JOT Internet Media — NLP keyword classification",
+        points: [
+          "Multi-stage hierarchical classifier based on RoBERTa for Google Ads keyword ranking, fine-tuning Hugging Face models on digital-marketing data.",
+        ],
+      },
+      {
+        name: "Fen (US Department of Defense) — medical AI research",
+        points: [
+          "Computer-vision models for hernia detection, vertebral segmentation and scoliosis/lordosis detection to support radiologists, delivered as a clinical web application.",
+        ],
+      },
     ],
   },
 ];
+
 const education = [
-  { title: "TODO — Degree", org: "TODO — University", period: "20XX" },
+  {
+    title: "M.Sc. in Language Technologies (NLP)",
+    org: "UNED",
+    period: "2025 — Present",
+  },
+  {
+    title: "B.Sc. in Data Science & Engineering",
+    org: "Universidad Carlos III de Madrid",
+    period: "2019 — 2023",
+    note: "Thesis: Reinforcement Learning applied to financial portfolio management.",
+  },
+  {
+    title: "42 Madrid",
+    org: "Fundación Telefónica",
+    period: "2021 — 2022",
+    note: "Intensive, project-based software-engineering program focused on autonomy and technical judgment.",
+  },
 ];
-const skills = [
-  "Python", "SQL", "Pandas", "scikit-learn", "PyTorch",
-  "LLMs / RAG", "Postgres", "Docker", "Astro",
+
+const skillGroups = [
+  {
+    label: "GenAI & NLP",
+    items: [
+      "Open-source LLMs (private deployment)",
+      "LangGraph",
+      "Agentic workflows",
+      "Agentic RAG",
+      "Hugging Face",
+      "Fine-tuning",
+    ],
+  },
+  {
+    label: "ML & Deep Learning",
+    items: [
+      "Predictive modeling",
+      "Computer vision",
+      "Time-series forecasting",
+      "Reinforcement learning",
+      "Experiment design",
+    ],
+  },
+  {
+    label: "MLOps & Cloud",
+    items: ["AWS", "BigQuery", "Snowflake", "Databricks", "MLflow", "Distributed processing"],
+  },
+  {
+    label: "Leadership",
+    items: [
+      "Technical mentoring",
+      "Architecture decisions",
+      "Project management",
+      "Stakeholder communication",
+    ],
+  },
+];
+
+const languages = [
+  { name: "Spanish", level: "Native" },
+  { name: "English", level: "Full professional (Trinity ISE II)" },
+  { name: "French", level: "Basic" },
 ];
 ---
 
 <Layout title="CV" description={`${site.name} — curriculum vitae`}>
   <section class="mx-auto max-w-3xl px-6 pt-20 pb-16">
-    <div class="flex items-end justify-between gap-4">
+    <div class="flex flex-wrap items-end justify-between gap-4">
       <div>
         <p class="eyebrow mb-2">// curriculum vitae</p>
         <h1 class="text-3xl font-semibold text-fog-100 sm:text-4xl">{site.name}</h1>
@@ -43,6 +140,8 @@ const skills = [
       }
     </div>
 
+    <p class="mt-6 max-w-2xl leading-relaxed text-fog-300">{summary}</p>
+
     <div class="mt-12 space-y-12">
       <div>
         <h2 class="mb-5 font-mono text-sm uppercase tracking-widest text-beacon">Experience</h2>
@@ -56,14 +155,24 @@ const skills = [
                   </h3>
                   <span class="font-mono text-xs text-fog-400">{job.period}</span>
                 </div>
-                <ul class="mt-3 space-y-1.5 text-sm leading-relaxed text-fog-300">
-                  {job.points.map((p) => (
-                    <li class="flex gap-2">
-                      <span class="mt-2 h-1 w-1 shrink-0 rounded-full bg-beacon" />
-                      {p}
-                    </li>
+                {job.summary && (
+                  <p class="mt-2 text-sm leading-relaxed text-fog-300">{job.summary}</p>
+                )}
+                <div class="mt-5 space-y-5">
+                  {job.clients.map((client) => (
+                    <div>
+                      <p class="text-sm font-medium text-fog-200">{client.name}</p>
+                      <ul class="mt-2 space-y-1.5 text-sm leading-relaxed text-fog-400">
+                        {client.points.map((p) => (
+                          <li class="flex gap-2">
+                            <span class="mt-2 h-1 w-1 shrink-0 rounded-full bg-beacon" />
+                            {p}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
             ))
           }
@@ -72,14 +181,17 @@ const skills = [
 
       <div>
         <h2 class="mb-5 font-mono text-sm uppercase tracking-widest text-beacon">Education</h2>
-        <div class="space-y-4">
+        <div class="space-y-5">
           {
             education.map((e) => (
-              <div class="flex flex-wrap items-baseline justify-between gap-2 border-l border-line pl-5">
-                <h3 class="font-medium text-fog-100">
-                  {e.title} · <span class="text-fog-300">{e.org}</span>
-                </h3>
-                <span class="font-mono text-xs text-fog-400">{e.period}</span>
+              <div class="border-l border-line pl-5">
+                <div class="flex flex-wrap items-baseline justify-between gap-2">
+                  <h3 class="font-medium text-fog-100">
+                    {e.title} · <span class="text-fog-300">{e.org}</span>
+                  </h3>
+                  <span class="font-mono text-xs text-fog-400">{e.period}</span>
+                </div>
+                {e.note && <p class="mt-1.5 text-sm text-fog-400">{e.note}</p>}
               </div>
             ))
           }
@@ -88,12 +200,34 @@ const skills = [
 
       <div>
         <h2 class="mb-5 font-mono text-sm uppercase tracking-widest text-beacon">Skills</h2>
-        <div class="flex flex-wrap gap-2">
+        <div class="space-y-4">
           {
-            skills.map((s) => (
-              <span class="rounded-md border border-line bg-ink-850/60 px-3 py-1 font-mono text-xs text-fog-200">
-                {s}
-              </span>
+            skillGroups.map((group) => (
+              <div class="flex flex-col gap-2 sm:flex-row sm:gap-4">
+                <p class="shrink-0 pt-1 font-mono text-xs uppercase tracking-wider text-fog-400 sm:w-40">
+                  {group.label}
+                </p>
+                <div class="flex flex-wrap gap-2">
+                  {group.items.map((s) => (
+                    <span class="rounded-md border border-line bg-ink-850/60 px-3 py-1 font-mono text-xs text-fog-200">
+                      {s}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <div>
+        <h2 class="mb-5 font-mono text-sm uppercase tracking-widest text-beacon">Languages</h2>
+        <div class="flex flex-wrap gap-x-8 gap-y-2">
+          {
+            languages.map((l) => (
+              <p class="text-sm text-fog-300">
+                <span class="text-fog-100">{l.name}</span> — {l.level}
+              </p>
             ))
           }
         </div>

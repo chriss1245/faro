@@ -20,8 +20,8 @@ everything I make.
 
 ## What's next
 
-- Wiring up live GitHub stats
 - The story behind **warren** and its investment theses
 - How **gollum** hunts down the best value-for-money at auction
+- Why I self-host the whole stack on a single box
 
-More soon.
+More soon — and it's coming, one post at a time.

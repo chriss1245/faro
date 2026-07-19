@@ -13,29 +13,20 @@ export interface Project {
 export const projects: Project[] = [
   {
     name: "warren",
-    tagline: "AI investment-analysis engine",
+    tagline: "AI investment analyst",
     description:
-      "Pulls data for my portfolio and candidate stocks, then runs numerical, fundamental and macro analysis plus intrinsic-value estimation. LLMs synthesise it into an investment thesis — entry, take-profit and stop-loss — when a credible one exists.",
+      "A multi-agent system, built on LangGraph, that pulls market data for my portfolio and candidate stocks and runs numerical, fundamental and macro analysis plus intrinsic-value estimation. LLMs synthesise it into a buy/sell thesis — entry, take-profit and stop-loss — when a credible one exists. Public sign-up, plus a read-only guest demo.",
     href: "https://warren.manapple.dev",
-    status: "building",
-    tags: ["LLMs", "Quant", "Fundamental", "Macro", "Valuation"],
+    status: "live",
+    tags: ["LangGraph", "Multi-agent", "Quant", "Valuation", "LLMs"],
   },
   {
     name: "gollum",
-    tagline: "Auctions tracker for best value-for-money",
+    tagline: "Auction tracker with automated alerting",
     description:
-      "Tracks auctions and surfaces the best quality-for-price item instead of just the cheapest. Born from a very real quest: finding the right necklace without overpaying.",
+      "A Playwright scraping pipeline that tracks auctions and surfaces the best quality-for-price item instead of just the cheapest, sending alerts through a self-hosted email service. On-demand LLM vision reads the listing photos. Born from a real quest: finding the right necklace without overpaying.",
     href: "https://gollum.manapple.dev",
-    status: "soon",
-    tags: ["Scraping", "Ranking", "Price intel"],
-  },
-  {
-    name: "openclaw",
-    tagline: "Self-hosted AI assistant",
-    description:
-      "A self-hosted assistant running on open models. Part of my push to own my whole stack — models, data and infrastructure.",
-    href: "https://openclaw.manapple.dev",
     status: "live",
-    tags: ["Self-hosted", "Open models", "Infra"],
+    tags: ["Scraping", "Ranking", "LLM vision", "Alerting"],
   },
 ];

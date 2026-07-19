@@ -1,18 +1,18 @@
-// Edit these — placeholders are marked. Don't worry, nothing here is scraped from anywhere.
+// Personal site config. Single source of truth for name, contact and socials.
 export const site = {
-  name: "Your Name", // TODO: your real name
-  role: "Data Scientist",
+  name: "Christopher Manzano Vimos",
+  role: "Data Scientist & AI Engineer",
   tagline:
-    "I build AI-driven data products that turn numbers into decisions — end to end.",
-  location: "TODO: City, Country",
-  email: "mvca1507@gmail.com",
-  // Social handles — fill these in; leave blank ("") to hide.
+    "I design, build and operate production AI systems end to end — from architecture to deployment.",
+  location: "Madrid, Spain",
+  email: "christopher.manzano.vimos@gmail.com",
+  // Social handles — leave blank ("") to hide.
   socials: {
-    github: "", // TODO: github username, e.g. "manapple"
-    linkedin: "", // TODO: linkedin vanity, e.g. "your-name"
+    github: "chriss1245",
+    linkedin: "christopher-manzano-vimos",
   },
   // Path (in /public) to a downloadable CV PDF; leave "" to hide the button.
-  cvPdf: "", // e.g. "/cv.pdf"
+  cvPdf: "/christopher-manzano-vimos-cv.pdf",
   domain: "manapple.dev",
 };
 
