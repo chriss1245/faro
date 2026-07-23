@@ -1,24 +1,32 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-/* ---- faro design tokens (lighthouse: a warm beacon over deep ink) ---- */
+/* ---- faro design tokens — "fintech dark premium" (the warren theme) ----
+   Canonical palette lives in ~/infra/brand (BRANDBOOK.md / tokens.css). The
+   accent tokens keep their historic names for stability:
+     beacon  = the primary signal green (emerald)  — was amber
+     aqua    = the secondary accent (indigo)        — was teal
+   Repoint values here; every `bg-beacon`/`text-aqua`/… utility follows. */
 @theme {
-  --color-ink-950: #05070d;
-  --color-ink-900: #0a0d16;
-  --color-ink-850: #0e121d;
-  --color-ink-800: #131826;
-  --color-ink-700: #1b2233;
-  --color-line: #232c40;
+  /* deep-slate surfaces (warren: default #0a0e17, paper #131a26) */
+  --color-ink-950: #070a11;
+  --color-ink-900: #0a0e17;
+  --color-ink-850: #0f1521;
+  --color-ink-800: #131a26;
+  --color-ink-700: #1b2433;
+  --color-line: #212b3b;
 
-  --color-fog-100: #eef1f8;
-  --color-fog-200: #cdd4e2;
-  --color-fog-300: #99a3b8;
-  --color-fog-400: #6b7488;
-  --color-fog-500: #3f475a;
+  /* text (warren: primary #eef2f8, secondary #92a0b5, disabled #5a6678) */
+  --color-fog-100: #eef2f8;
+  --color-fog-200: #c7d0de;
+  --color-fog-300: #92a0b5;
+  --color-fog-400: #5a6678;
+  --color-fog-500: #3a4356;
 
-  --color-beacon: #f7b733;
-  --color-beacon-600: #e0a020;
-  --color-aqua: #46d6c0;
+  /* accents — emerald primary + indigo secondary (warren primary/secondary) */
+  --color-beacon: #00e2a0;
+  --color-beacon-600: #00c78d;
+  --color-aqua: #7c8cf8;
 
   --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-mono: ui-monospace, "JetBrains Mono", SFMono-Regular, Menlo, monospace;
@@ -37,15 +45,16 @@
   }
 }
 
-/* Fixed lighthouse-beam glow + faint grid behind everything */
+/* Fixed dual-glow (emerald + indigo) + faint grid behind everything.
+   Mirrors warren's body backdrop: soft signal-green top-right, indigo top-left. */
 .beam {
   position: fixed;
   inset: 0;
   z-index: 0;
   pointer-events: none;
   background:
-    radial-gradient(55rem 55rem at 78% -8%, color-mix(in oklab, var(--color-beacon) 16%, transparent), transparent 60%),
-    radial-gradient(45rem 38rem at 8% -4%, color-mix(in oklab, var(--color-aqua) 8%, transparent), transparent 55%),
+    radial-gradient(55rem 55rem at 80% -10%, color-mix(in oklab, var(--color-beacon) 10%, transparent), transparent 60%),
+    radial-gradient(45rem 38rem at 0% 0%, color-mix(in oklab, var(--color-aqua) 8%, transparent), transparent 55%),
     linear-gradient(to bottom, var(--color-ink-950), var(--color-ink-900));
 }
 .beam::after {
