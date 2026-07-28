@@ -11,9 +11,38 @@ const focus = [
   "Self-hosted infra",
   "Shipping in public",
 ];
+
+// JSON-LD Person — helps Google associate this site with me and disambiguate homonyms.
+const personLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: site.name,
+  jobTitle: site.role,
+  description: site.tagline,
+  url: `https://${site.domain}`,
+  email: `mailto:${site.email}`,
+  address: { "@type": "PostalAddress", addressLocality: site.location },
+  sameAs: [
+    `https://github.com/${site.socials.github}`,
+    `https://www.linkedin.com/in/${site.socials.linkedin}`,
+  ],
+  knowsAbout: [
+    "Machine Learning",
+    "Multi-agent systems",
+    "LangGraph",
+    "Large Language Models",
+    "Data Science",
+    "MLOps",
+  ],
+};
 ---
 
 <Layout>
+  <script
+    type="application/ld+json"
+    slot="head"
+    set:html={JSON.stringify(personLd)}
+  />
   <!-- Hero -->
   <section class="mx-auto max-w-5xl px-6 pt-20 pb-16 sm:pt-28">
     <p class="eyebrow mb-5">Data Scientist · building in public</p>

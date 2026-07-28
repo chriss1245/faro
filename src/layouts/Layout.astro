@@ -7,9 +7,23 @@ import { site } from "../data/site";
 interface Props {
   title?: string;
   description?: string;
+  /** Path (in /public) to the social share image for this page. */
+  image?: string;
+  /** og:type — "website" for pages, "article" for blog posts. */
+  type?: "website" | "article";
 }
-const { title, description = site.tagline } = Astro.props;
+const {
+  title,
+  description = site.tagline,
+  image = "/og/default.png",
+  type = "website",
+} = Astro.props;
+
 const fullTitle = title ? `${title} · ${site.name}` : `${site.name} — ${site.role}`;
+
+// Absolute URLs (Astro.site is set in astro.config.mjs).
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const imageUrl = new URL(image, Astro.site).href;
 ---
 
 <!doctype html>
@@ -17,13 +31,35 @@ const fullTitle = title ? `${title} · ${site.name}` : `${site.name} — ${site.
   <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
+
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="author" content={site.name} />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={site.name} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={fullTitle} />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+
+    <slot name="head" />
   </head>
   <body
     class="min-h-screen bg-ink-950 text-fog-100 antialiased selection:bg-beacon/30 selection:text-fog-100"

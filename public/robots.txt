@@ -1,0 +1,5 @@
+# manapple.dev — allow all well-behaved crawlers.
+User-agent: *
+Allow: /
+
+Sitemap: https://manapple.dev/sitemap-index.xml

@@ -15,13 +15,11 @@ const statusLabel: Record<Project["status"], string> = {
   building: "Building",
   soon: "Coming soon",
 };
-const Tag = project.href ? "a" : "div";
+const detailHref = `/${project.slug}`;
 ---
 
-<Tag
-  href={project.href}
-  target={project.href ? "_blank" : undefined}
-  rel={project.href ? "noopener" : undefined}
+<a
+  href={detailHref}
   class="card-hover group relative flex flex-col rounded-2xl border border-line bg-ink-850/70 p-6"
 >
   <div class="mb-3 flex items-center justify-between gap-3">
@@ -46,23 +44,19 @@ const Tag = project.href ? "a" : "div";
     }
   </div>
 
-  {
-    project.href && (
-      <span class="mt-5 inline-flex items-center gap-1.5 text-sm text-beacon">
-        Visit
-        <svg
-          width="14"
-          height="14"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          class="transition-transform group-hover:translate-x-0.5"
-          aria-hidden="true"
-        >
-          <path d="M5 12h14M13 6l6 6-6 6" />
-        </svg>
-      </span>
-    )
-  }
-</Tag>
+  <span class="mt-5 inline-flex items-center gap-1.5 text-sm text-beacon">
+    View project
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      class="transition-transform group-hover:translate-x-0.5"
+      aria-hidden="true"
+    >
+      <path d="M5 12h14M13 6l6 6-6 6" />
+    </svg>
+  </span>
+</a>
