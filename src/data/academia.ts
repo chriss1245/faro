@@ -135,7 +135,7 @@ export const academicProjects: AcademicProject[] = [
     context: "Multivariate analysis assignment",
     year: "2020",
     description:
-      "A classical face-recognition pipeline built from the statistics up: PCA for dimensionality reduction on raw face images, Fisher discriminant analysis for a class-separating projection, and k-NN for the final decision — including an impostor set to test rejection.",
+      "A classical face-recognition pipeline built from the statistics up, on 25 identities from the Faces96 database: PCA for dimensionality reduction on raw images, Fisher discriminant analysis for a class-separating projection, and k-NN for the decision — with an impostor set and a reject label, so unknown faces are turned away rather than forced into a class.",
     methods: ["PCA", "Fisher discriminant analysis", "k-NN", "R"],
     repoUrl: "https://github.com/chriss1245/face-recognizer_with_fda_pca_knn",
     reportUrl:
