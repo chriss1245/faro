@@ -56,7 +56,17 @@ const experience = [
   },
 ];
 
-const education = [
+interface Education {
+  title: string;
+  org: string;
+  period: string;
+  note?: string;
+  /** Optional internal link appended to the note (e.g. the thesis page). */
+  noteHref?: string;
+  noteLinkLabel?: string;
+}
+
+const education: Education[] = [
   {
     title: "M.Sc. in Language Technologies (NLP)",
     org: "UNED",
@@ -66,7 +76,9 @@ const education = [
     title: "B.Sc. in Data Science & Engineering",
     org: "Universidad Carlos III de Madrid",
     period: "2019 — 2023",
-    note: "Thesis: Reinforcement Learning applied to financial portfolio management.",
+    note: "Thesis: Reinforcement Learning in Portfolio Management — a Soft Actor-Critic agent over a TCN encoder, benchmarked on 37 years of S&P 500 data.",
+    noteHref: "/academia",
+    noteLinkLabel: "Read it",
   },
   {
     title: "42 Madrid",
@@ -191,7 +203,19 @@ const languages = [
                   </h3>
                   <span class="font-mono text-xs text-fog-400">{e.period}</span>
                 </div>
-                {e.note && <p class="mt-1.5 text-sm text-fog-400">{e.note}</p>}
+                {e.note && (
+                  <p class="mt-1.5 text-sm text-fog-400">
+                    {e.note}
+                    {e.noteHref && (
+                      <>
+                        {" "}
+                        <a href={e.noteHref} class="link-underline text-beacon">
+                          {e.noteLinkLabel ?? "Read more"} →
+                        </a>
+                      </>
+                    )}
+                  </p>
+                )}
               </div>
             ))
           }
