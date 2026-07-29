@@ -1,7 +1,9 @@
 ---
 import { site } from "../data/site";
+import ThemeToggle from "./ThemeToggle.astro";
 const links = [
   { href: "/#work", label: "Work" },
+  { href: "/academia", label: "Academia" },
   { href: "/writing", label: "Writing" },
   { href: "/cv", label: "CV" },
 ];
@@ -13,12 +15,12 @@ const links = [
       <span
         class="relative grid h-7 w-7 place-items-center rounded-md border border-line bg-ink-800"
       >
-        <span class="h-2 w-2 rounded-full bg-beacon shadow-[0_0_12px_3px_var(--color-beacon)]"></span>
+        <span class="logo-dot h-2 w-2 rounded-full bg-beacon"></span>
       </span>
       <span class="font-mono text-sm tracking-wide text-fog-200">Christopher Manzano</span>
     </a>
 
-    <div class="flex items-center gap-6 text-sm text-fog-300">
+    <div class="flex items-center gap-3.5 text-sm text-fog-300 sm:gap-6">
       {
         links.map((l) => (
           <a href={l.href} class="link-underline hover:text-fog-100">
@@ -30,12 +32,13 @@ const links = [
         site.email && (
           <a
             href={`mailto:${site.email}`}
-            class="hidden rounded-full border border-line bg-ink-800 px-3.5 py-1.5 text-fog-100 transition-colors hover:border-beacon/50 hover:text-beacon sm:inline-block"
+            class="hidden rounded-full border border-line bg-ink-800 px-3.5 py-1.5 text-fog-100 transition-colors hover:border-beacon/50 hover:text-beacon lg:inline-block"
           >
             Get in touch
           </a>
         )
       }
+      <ThemeToggle />
     </div>
   </nav>
 </header>

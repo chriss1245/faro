@@ -27,12 +27,27 @@ const imageUrl = new URL(image, Astro.site).href;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
   <head>
     <meta charset="utf-8" />
+    <!-- Apply the stored theme before first paint, otherwise a dark-mode
+         visitor gets a white flash on every navigation. Light is the default;
+         only an explicit past choice switches it. Kept inline and is:inline
+         (no bundling) so it runs ahead of the stylesheet. -->
+    <script is:inline>
+      try {
+        if (localStorage.getItem("faro-theme") === "dark") {
+          document.documentElement.dataset.theme = "dark";
+        }
+      } catch (e) {
+        /* storage blocked — stay on the default light theme */
+      }
+    </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#070a11" media="(prefers-color-scheme: dark)" />
     <meta name="generator" content={Astro.generator} />
 
     <title>{fullTitle}</title>
