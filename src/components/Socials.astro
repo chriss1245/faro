@@ -1,5 +1,8 @@
 ---
-import { site } from "../data/site";
+// Handles are locale-independent, so this needs no lang prop.
+import { getSite } from "../data/site";
+import { defaultLang } from "../i18n/config";
+const site = getSite(defaultLang);
 const { github, linkedin } = site.socials;
 ---
 

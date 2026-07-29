@@ -13,7 +13,15 @@ const fmt = (d: Date) =>
   d.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
 ---
 
-<Layout title={post.data.title} description={post.data.description} type="article">
+<!-- Posts exist in English only, so no hreflang set is emitted — claiming a
+     Spanish counterpart that does not exist is worse than claiming none. -->
+<Layout
+  lang="en"
+  title={post.data.title}
+  description={post.data.description}
+  type="article"
+  singleLocale
+>
   <article class="mx-auto max-w-2xl px-6 pt-20 pb-20">
     <a href="/writing" class="font-mono text-xs text-fog-400 transition-colors hover:text-beacon"
       >← writing</a

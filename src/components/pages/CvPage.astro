@@ -1,0 +1,154 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getSite } from "../../data/site";
+import { getCv } from "../../data/cv";
+import { localizePath, type Lang } from "../../i18n/config";
+import { useTranslations } from "../../i18n/ui";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const site = getSite(lang);
+const cv = getCv(lang);
+---
+
+<Layout lang={lang} title={t("nav.cv")} description={cv.summary.slice(0, 200)}>
+  <section class="mx-auto max-w-3xl px-6 pt-20 pb-16">
+    <div class="flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <p class="eyebrow eyebrow-code mb-2">{t("cv.eyebrow")}</p>
+        <h1 class="text-3xl font-semibold text-fog-100 sm:text-4xl">{site.name}</h1>
+        <p class="mt-2 text-fog-300">{site.role} · {site.location}</p>
+      </div>
+      {
+        site.cvPdf && (
+          <a
+            href={site.cvPdf}
+            class="rounded-full border border-line bg-ink-800 px-4 py-2 text-sm text-fog-100 transition-colors hover:border-beacon/50 hover:text-beacon"
+          >
+            {t("cv.download")}
+          </a>
+        )
+      }
+    </div>
+
+    <p class="mt-6 max-w-2xl leading-relaxed text-fog-300">{cv.summary}</p>
+
+    <div class="mt-12 space-y-12">
+      <div>
+        <h2 class="mb-5 font-mono text-sm uppercase tracking-widest text-beacon">
+          {t("cv.experience")}
+        </h2>
+        <div class="space-y-8">
+          {
+            cv.experience.map((job) => (
+              <div class="border-l border-line pl-5">
+                <div class="flex flex-wrap items-baseline justify-between gap-2">
+                  <h3 class="text-lg font-medium text-fog-100">
+                    {job.role} · <span class="text-fog-300">{job.org}</span>
+                  </h3>
+                  <span class="font-mono text-xs text-fog-400">{job.period}</span>
+                </div>
+                {job.summary && (
+                  <p class="mt-2 text-sm leading-relaxed text-fog-300">{job.summary}</p>
+                )}
+                <div class="mt-5 space-y-5">
+                  {job.clients.map((client) => (
+                    <div>
+                      <p class="text-sm font-medium text-fog-200">{client.name}</p>
+                      <ul class="mt-2 space-y-1.5 text-sm leading-relaxed text-fog-400">
+                        {client.points.map((p) => (
+                          <li class="flex gap-2">
+                            <span class="mt-2 h-1 w-1 shrink-0 rounded-full bg-beacon" />
+                            {p}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <div>
+        <h2 class="mb-5 font-mono text-sm uppercase tracking-widest text-beacon">
+          {t("cv.education")}
+        </h2>
+        <div class="space-y-5">
+          {
+            cv.education.map((e) => (
+              <div class="border-l border-line pl-5">
+                <div class="flex flex-wrap items-baseline justify-between gap-2">
+                  <h3 class="font-medium text-fog-100">
+                    {e.title} · <span class="text-fog-300">{e.org}</span>
+                  </h3>
+                  <span class="font-mono text-xs text-fog-400">{e.period}</span>
+                </div>
+                {e.note && (
+                  <p class="mt-1.5 text-sm text-fog-400">
+                    {e.note}
+                    {e.noteRoute && (
+                      <>
+                        {" "}
+                        <a
+                          href={localizePath(e.noteRoute, lang)}
+                          class="link-underline text-beacon"
+                        >
+                          {t("cv.readIt")} →
+                        </a>
+                      </>
+                    )}
+                  </p>
+                )}
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <div>
+        <h2 class="mb-5 font-mono text-sm uppercase tracking-widest text-beacon">
+          {t("cv.skills")}
+        </h2>
+        <div class="space-y-4">
+          {
+            cv.skills.map((group) => (
+              <div class="flex flex-col gap-2 sm:flex-row sm:gap-4">
+                <p class="shrink-0 pt-1 font-mono text-xs uppercase tracking-wider text-fog-400 sm:w-44">
+                  {group.label}
+                </p>
+                <div class="flex flex-wrap gap-2">
+                  {group.items.map((s) => (
+                    <span class="rounded-md border border-line bg-ink-850/60 px-3 py-1 font-mono text-xs text-fog-200">
+                      {s}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <div>
+        <h2 class="mb-5 font-mono text-sm uppercase tracking-widest text-beacon">
+          {t("cv.languages")}
+        </h2>
+        <div class="flex flex-wrap gap-x-8 gap-y-2">
+          {
+            cv.languages.map((l) => (
+              <p class="text-sm text-fog-300">
+                <span class="text-fog-100">{l.name}</span> — {l.level}
+              </p>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

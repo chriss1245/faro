@@ -98,6 +98,12 @@ const pages = [
     subtitle: "Playwright scraping, quality-for-price ranking, LLM vision.",
   },
   {
+    file: "services.png",
+    eyebrow: "// services",
+    title: "Work with me",
+    subtitle: "Talks, mentoring and freelance AI consulting · ES / EN.",
+  },
+  {
     file: "academia.png",
     eyebrow: "// academia · bachelor thesis",
     title: "Deep RL for portfolios",

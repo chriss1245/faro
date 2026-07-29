@@ -1,0 +1,77 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import ServiceCard from "../ServiceCard.astro";
+import { getSite } from "../../data/site";
+import { getServices, servicesIntro } from "../../data/services";
+import type { Lang } from "../../i18n/config";
+import { useTranslations } from "../../i18n/ui";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const site = getSite(lang);
+const services = getServices(lang);
+const intro = servicesIntro[lang];
+
+// One Service entity per offering, so search engines can surface them as
+// distinct services rather than as one page about "consulting".
+const servicesLd = {
+  "@context": "https://schema.org",
+  "@graph": services.map((s) => ({
+    "@type": "Service",
+    name: s.title,
+    description: s.description,
+    serviceType: s.tagline,
+    areaServed: [{ "@type": "Country", name: "Spain" }, { "@type": "Place", name: "Remote" }],
+    availableLanguage: ["es", "en"],
+    provider: {
+      "@type": "Person",
+      name: site.name,
+      jobTitle: site.role,
+      url: `https://${site.domain}`,
+      email: `mailto:${site.email}`,
+    },
+  })),
+};
+---
+
+<Layout
+  lang={lang}
+  title={t("services.navTitle")}
+  description={intro.seoDescription}
+  image="/og/services.png"
+>
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(servicesLd)} />
+
+  <div class="mx-auto max-w-5xl px-6 pt-20 pb-20">
+    <header class="max-w-2xl">
+      <p class="eyebrow eyebrow-code mb-4">{t("services.eyebrow")}</p>
+      <h1 class="text-3xl font-semibold leading-tight text-fog-100 sm:text-4xl">
+        {t("services.title")}
+      </h1>
+      <p class="mt-5 text-lg leading-relaxed text-fog-300">{intro.lead}</p>
+    </header>
+
+    <div class="mt-14 space-y-6">
+      {services.map((service) => <ServiceCard service={service} lang={lang} email={site.email} />)}
+    </div>
+
+    <!-- Catch-all for enquiries that fit none of the three -->
+    <div
+      class="mt-12 flex flex-col items-start justify-between gap-6 rounded-2xl border border-line bg-gradient-to-br from-ink-850 to-ink-900 p-8 sm:flex-row sm:items-center"
+    >
+      <div class="max-w-xl">
+        <h2 class="text-xl font-semibold text-fog-100">{t("services.contactTitle")}</h2>
+        <p class="mt-2 text-sm leading-relaxed text-fog-400">{t("services.contactBody")}</p>
+      </div>
+      <a
+        href={`mailto:${site.email}`}
+        class="shrink-0 rounded-full bg-beacon px-5 py-2.5 text-sm font-semibold text-on-beacon transition-colors hover:bg-beacon-600"
+      >
+        {t("services.contactCta")}
+      </a>
+    </div>
+  </div>
+</Layout>

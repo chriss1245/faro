@@ -1,44 +1,72 @@
 ---
-import { site } from "../data/site";
+import { getSite } from "../data/site";
+import { localizePath, type Lang } from "../i18n/config";
+import { useTranslations } from "../i18n/ui";
 import ThemeToggle from "./ThemeToggle.astro";
+import LangSwitcher from "./LangSwitcher.astro";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const site = getSite(lang);
+
 const links = [
-  { href: "/#work", label: "Work" },
-  { href: "/academia", label: "Academia" },
-  { href: "/writing", label: "Writing" },
-  { href: "/cv", label: "CV" },
+  { route: "/#work", label: t("nav.work") },
+  { route: "/academia", label: t("nav.academia") },
+  { route: "/services", label: t("nav.services") },
+  { route: "/writing", label: t("nav.writing") },
+  { route: "/cv", label: t("nav.cv") },
 ];
 ---
 
 <header class="sticky top-0 z-50 border-b border-line/60 bg-ink-950/70 backdrop-blur-md">
-  <nav class="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-    <a href="/" class="group flex items-center gap-2.5" aria-label="Christopher Manzano — home">
+  <nav class="mx-auto flex max-w-5xl items-center justify-between gap-4 px-6 py-4">
+    <a
+      href={localizePath("/", lang)}
+      class="group flex shrink-0 items-center gap-2.5"
+      aria-label={`${site.name} — ${t("nav.home")}`}
+    >
       <span
         class="relative grid h-7 w-7 place-items-center rounded-md border border-line bg-ink-800"
       >
         <span class="logo-dot h-2 w-2 rounded-full bg-beacon"></span>
       </span>
-      <span class="font-mono text-sm tracking-wide text-fog-200">Christopher Manzano</span>
+      <span class="hidden font-mono text-sm tracking-wide text-fog-200 sm:inline"
+        >Christopher Manzano</span
+      >
     </a>
 
-    <div class="flex items-center gap-3.5 text-sm text-fog-300 sm:gap-6">
-      {
-        links.map((l) => (
-          <a href={l.href} class="link-underline hover:text-fog-100">
-            {l.label}
-          </a>
-        ))
-      }
+    <div class="flex items-center gap-3 text-sm text-fog-300 sm:gap-5">
+      <!-- The link row scrolls sideways on narrow phones instead of wrapping
+           under the logo, which kept the sticky header two rows tall. -->
+      <div class="flex items-center gap-3.5 overflow-x-auto sm:gap-5 [scrollbar-width:none]">
+        {
+          links.map((l) => (
+            <a
+              href={localizePath(l.route, lang)}
+              class="link-underline shrink-0 whitespace-nowrap hover:text-fog-100"
+            >
+              {l.label}
+            </a>
+          ))
+        }
+      </div>
       {
         site.email && (
           <a
             href={`mailto:${site.email}`}
-            class="hidden rounded-full border border-line bg-ink-800 px-3.5 py-1.5 text-fog-100 transition-colors hover:border-beacon/50 hover:text-beacon lg:inline-block"
+            class="hidden shrink-0 rounded-full border border-line bg-ink-800 px-3.5 py-1.5 text-fog-100 transition-colors hover:border-beacon/50 hover:text-beacon xl:inline-block"
           >
-            Get in touch
+            {t("nav.contact")}
           </a>
         )
       }
-      <ThemeToggle />
+      <div class="flex shrink-0 items-center gap-2">
+        <LangSwitcher lang={lang} />
+        <ThemeToggle />
+      </div>
     </div>
   </nav>
 </header>

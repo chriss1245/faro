@@ -1,25 +1,29 @@
 ---
-import type { Project } from "../data/projects";
+import type { Project, ProjectStatus } from "../data/projects";
+import { localizePath, type Lang } from "../i18n/config";
+import { useTranslations } from "../i18n/ui";
+
 interface Props {
   project: Project;
+  lang: Lang;
 }
-const { project } = Astro.props;
+const { project, lang } = Astro.props;
+const t = useTranslations(lang);
 
-const statusStyles: Record<Project["status"], string> = {
+const statusStyles: Record<ProjectStatus, string> = {
   live: "border-aqua/40 text-aqua",
   building: "border-beacon/40 text-beacon",
   soon: "border-line text-fog-400",
 };
-const statusLabel: Record<Project["status"], string> = {
-  live: "Live",
-  building: "Building",
-  soon: "Coming soon",
+const statusLabel: Record<ProjectStatus, string> = {
+  live: t("project.status.live"),
+  building: t("project.status.building"),
+  soon: t("project.status.soon"),
 };
-const detailHref = `/${project.slug}`;
 ---
 
 <a
-  href={detailHref}
+  href={localizePath(`/${project.slug}`, lang)}
   class="card-hover group relative flex flex-col rounded-2xl border border-line bg-ink-850/70 p-6"
 >
   <div class="mb-3 flex items-center justify-between gap-3">
@@ -36,16 +40,16 @@ const detailHref = `/${project.slug}`;
 
   <div class="mt-4 flex flex-wrap gap-1.5">
     {
-      project.tags.map((t) => (
+      project.tags.map((tag) => (
         <span class="rounded-md bg-ink-800 px-2 py-0.5 font-mono text-[0.7rem] text-fog-300">
-          {t}
+          {tag}
         </span>
       ))
     }
   </div>
 
   <span class="mt-5 inline-flex items-center gap-1.5 text-sm text-beacon">
-    View project
+    {t("project.view")}
     <svg
       width="14"
       height="14"

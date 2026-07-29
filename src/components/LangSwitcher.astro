@@ -1,0 +1,36 @@
+---
+// Switches to the same page in the other locale, not to its home page — losing
+// your place on a language switch is the classic i18n annoyance.
+import { languages, otherLangs, translatePath, type Lang } from "../i18n/config";
+import { useTranslations } from "../i18n/ui";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+// Two locales, so there is exactly one target; kept as a list so adding a third
+// language turns this into a set of links rather than a rewrite.
+const targets = otherLangs(lang).map((l) => ({
+  lang: l,
+  label: l.toUpperCase(),
+  name: languages[l],
+  href: translatePath(Astro.url.pathname, l),
+}));
+---
+
+{
+  targets.map((target) => (
+    <a
+      href={target.href}
+      hreflang={target.lang}
+      lang={target.lang}
+      title={t("nav.switchLang")}
+      aria-label={t("nav.switchLang")}
+      class="grid h-8 min-w-8 place-items-center rounded-md border border-line bg-ink-800 px-1.5 font-mono text-[0.7rem] font-medium text-fog-300 transition-colors hover:border-beacon/50 hover:text-beacon"
+    >
+      {target.label}
+    </a>
+  ))
+}

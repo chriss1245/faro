@@ -181,6 +181,13 @@ html[data-theme="dark"] .theme-icon-moon {
   text-transform: uppercase;
   color: var(--color-beacon);
 }
+/* The `//` code-comment marker is presentation, not content — it lives here
+   rather than inside the translated strings, so the whole site's visual voice
+   can change by editing one rule. Section eyebrows opt in with .eyebrow-code;
+   standalone ones (the hero kicker) do not. */
+.eyebrow-code::before {
+  content: "// ";
+}
 .card-hover {
   transition: transform 0.25s ease, border-color 0.25s ease, background-color 0.25s ease;
 }

@@ -1,19 +1,39 @@
 ---
+// Single 404 for the whole site: nginx serves it for any unmatched path, so it
+// cannot know the visitor's locale. Bilingual on one page rather than guessing.
 import Layout from "../layouts/Layout.astro";
+import { defaultLang, languages, localeTags, localizePath, type Lang } from "../i18n/config";
+import { useTranslations } from "../i18n/ui";
+
+const langs = Object.keys(languages) as Lang[];
 ---
 
-<Layout title="Not found" description="This page drifted off the map.">
+<Layout lang={defaultLang} title="Not found" description="This page drifted off the map." singleLocale>
   <section class="mx-auto max-w-3xl px-6 py-32 text-center">
-    <p class="eyebrow mb-4">// 404</p>
-    <h1 class="text-5xl font-semibold text-fog-100">Lost at sea.</h1>
-    <p class="mt-4 text-fog-300">
-      This page drifted off the map — but the beacon's still on.
-    </p>
-    <a
-      href="/"
-      class="mt-8 inline-block rounded-full bg-beacon px-5 py-2.5 text-sm font-semibold text-on-beacon transition-colors hover:bg-beacon-600"
-    >
-      Back home
-    </a>
+    <p class="eyebrow eyebrow-code mb-4">404</p>
+    {
+      langs.map((l, i) => {
+        const t = useTranslations(l);
+        return (
+          <div lang={localeTags[l]} class={i === 0 ? "" : "mt-12 border-t border-line/60 pt-12"}>
+            <h1
+              class:list={[
+                "font-semibold text-fog-100",
+                i === 0 ? "text-4xl sm:text-5xl" : "text-2xl sm:text-3xl",
+              ]}
+            >
+              {t("notFound.title")}
+            </h1>
+            <p class="mt-4 text-fog-300">{t("notFound.body")}</p>
+            <a
+              href={localizePath("/", l)}
+              class="mt-6 inline-block rounded-full bg-beacon px-5 py-2.5 text-sm font-semibold text-on-beacon transition-colors hover:bg-beacon-600"
+            >
+              {t("notFound.cta")}
+            </a>
+          </div>
+        );
+      })
+    }
   </section>
 </Layout>

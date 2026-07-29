@@ -1,6 +1,15 @@
 ---
-import { site } from "../data/site";
+import { getSite } from "../data/site";
+import type { Lang } from "../i18n/config";
+import { useTranslations } from "../i18n/ui";
 import Socials from "./Socials.astro";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const site = getSite(lang);
 const year = new Date().getFullYear();
 ---
 
@@ -8,7 +17,7 @@ const year = new Date().getFullYear();
   <div
     class="mx-auto flex max-w-5xl flex-col items-center justify-between gap-4 px-6 py-8 text-sm text-fog-400 sm:flex-row"
   >
-    <p>© {year} {site.name} · {site.role} · built with Astro.</p>
+    <p>© {year} {site.name} · {site.role} · {t("footer.builtWith")}.</p>
     <Socials />
   </div>
 </footer>
