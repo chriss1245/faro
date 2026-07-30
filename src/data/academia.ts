@@ -155,8 +155,9 @@ const academicDefs: AcademicProjectDef[] = [
   {
     year: "2022",
     repoUrl: "https://github.com/chriss1245/latent_dirichlet_allocation-case-study",
-    reportUrl:
-      "https://htmlpreview.github.io/?https://github.com/chriss1245/latent_dirichlet_allocation-case-study/blob/master/index.html",
+    // The knitted report is published on the repo's own GitHub Pages, so no
+    // third-party HTML renderer is involved.
+    reportUrl: "https://chriss1245.github.io/latent_dirichlet_allocation-case-study/",
     text: {
       en: {
         title: "Topic modelling with Latent Dirichlet Allocation",
@@ -179,8 +180,7 @@ const academicDefs: AcademicProjectDef[] = [
   {
     year: "2022",
     repoUrl: "https://github.com/chriss1245/death_penalty_nlp",
-    reportUrl:
-      "https://htmlpreview.github.io/?https://github.com/chriss1245/death_penalty_nlp/blob/master/Exercise.html",
+    reportUrl: "https://chriss1245.github.io/death_penalty_nlp/",
     text: {
       en: {
         title: "Stance detection on death-penalty tweets",
