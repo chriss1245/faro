@@ -12,7 +12,7 @@ const en = {
   "nav.work": "Work",
   "nav.academia": "Academia",
   "nav.services": "Services",
-  "nav.writing": "Writing",
+  "nav.writing": "Blog",
   "nav.cv": "CV",
   "nav.contact": "Get in touch",
   "nav.home": "home",
@@ -103,8 +103,8 @@ const en = {
   "cv.readMore": "Read more",
 
   // Writing
-  "writing.eyebrow": "writing",
-  "writing.title": "Writing",
+  "writing.eyebrow": "blog",
+  "writing.title": "Blog",
   "writing.heading": "Building, out loud.",
   "writing.lead": "Notes and stories from designing, breaking and shipping the things in my portfolio.",
   "writing.seoDescription": "Stories from building data products in public.",
@@ -112,7 +112,7 @@ const en = {
   "writing.englishOnlyNotice":
     "The posts are written in English — translating them well takes more care than it takes to write them, so for now they stay in the original.",
   "writing.readPost": "Read",
-  "writing.back": "← All writing",
+  "writing.back": "← All posts",
 
   // Contact
   "contact.title": "Let's build something.",

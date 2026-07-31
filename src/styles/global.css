@@ -60,30 +60,33 @@
   --font-mono: ui-monospace, "JetBrains Mono", SFMono-Regular, Menlo, monospace;
 }
 
-/* Dark theme — the same paper/ink relationship after dusk: near-black page,
-   slightly lifted cards, the ink blue opened up so it still reads as a link.
+/* Dark theme — the same warm paper after dusk, NOT a developer's terminal.
+   A near-black page with a bright blue accent reads as an IDE; this is a warm
+   charcoal (the light theme's paper turned down) with cards lifted slightly
+   above it, off-white text rather than pure white, and the blue desaturated so
+   it sits on the page instead of glowing off it.
    `html[data-theme="dark"]` outranks the `:root` block Tailwind emits. */
 html[data-theme="dark"] {
   color-scheme: dark;
 
-  --color-ink-950: #101216;
-  --color-ink-900: #14171c;
-  --color-ink-850: #191d24;
-  --color-ink-800: #20252d;
-  --color-ink-700: #2a303a;
-  --color-line: #2e343e;
+  --color-ink-950: #1a1917;
+  --color-ink-900: #201f1c;
+  --color-ink-850: #24231f;
+  --color-ink-800: #2b2926;
+  --color-ink-700: #363330;
+  --color-line: #38352f;
 
-  --color-fog-100: #f2f1ee;
-  --color-fog-200: #cdd2da;
-  --color-fog-300: #a3aab5;
-  --color-fog-400: #838a96;
-  --color-fog-500: #565d68;
+  --color-fog-100: #ece9e3;
+  --color-fog-200: #cfcbc3;
+  --color-fog-300: #a8a49c;
+  --color-fog-400: #918e88;
+  --color-fog-500: #5f5c57;
 
-  --color-beacon: #a7c0ff;
-  --color-beacon-600: #c8d8ff;
-  --color-aqua: #7fc7c0;
+  --color-beacon: #a8bde2;
+  --color-beacon-600: #c2d2ec;
+  --color-aqua: #9ac4bc;
 
-  --color-on-beacon: #101216;
+  --color-on-beacon: #1a1917;
 }
 
 html[data-theme="light"] {
