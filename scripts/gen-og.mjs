@@ -8,15 +8,19 @@ import { dirname, resolve } from "node:path";
 const outDir = resolve(dirname(fileURLToPath(import.meta.url)), "../public/og");
 mkdirSync(outDir, { recursive: true });
 
-// Brand tokens — the DARK palette from src/styles/global.css. Share cards stay
-// dark in both themes: they are read as images on someone else's timeline, not
-// as part of the site, and the dark card is the stronger brand impression.
-const INK = "#070a11";
-const INK2 = "#131a26";
-const FOG = "#eef2f8";
-const FOG3 = "#92a0b5";
-const BEACON = "#00e2a0";
-const LINE = "#212b3b";
+// Brand tokens — the LIGHT palette from src/styles/global.css. The cards match
+// the site's editorial register: warm paper, ink text, one blue rule. A share
+// card is the first impression of the site, so it should not contradict it.
+const PAPER = "#fbfaf8";
+const PAPER2 = "#f5f3ef";
+const INK = "#15181d";
+const FOG3 = "#4d545e";
+const FOG4 = "#656c77";
+const BEACON = "#1d3f8f";
+const LINE = "#dedad2";
+
+const SERIF = "Source Serif 4, Georgia, Times New Roman, serif";
+const SANS = "Inter, Helvetica, Arial, sans-serif";
 
 const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
@@ -28,7 +32,7 @@ const MAX_W = 1040; // 1200 minus the 80px gutters
 
 // Average advance width as a fraction of font-size, measured for the two
 // families used below. Deliberately slightly generous.
-const AVG = { sans: 0.55, mono: 0.6 };
+const AVG = { sans: 0.55, serif: 0.5 };
 const WIDE = /[MWmw@]/g; // glyphs well above the average
 const NARROW = /[iljtfIr.,;:'! ]/g; // glyphs well below it
 
@@ -50,62 +54,57 @@ function fit(text, size, family) {
 function svg({ eyebrow, title, subtitle }) {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="${INK}"/>
-      <stop offset="1" stop-color="${INK2}"/>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="${PAPER}"/>
+      <stop offset="1" stop-color="${PAPER2}"/>
     </linearGradient>
-    <radialGradient id="beam" cx="0.16" cy="0.12" r="0.9">
-      <stop offset="0" stop-color="${BEACON}" stop-opacity="0.18"/>
-      <stop offset="0.5" stop-color="${BEACON}" stop-opacity="0"/>
-    </radialGradient>
   </defs>
   <rect width="1200" height="630" fill="url(#bg)"/>
-  <rect width="1200" height="630" fill="url(#beam)"/>
-  <rect x="0" y="0" width="1200" height="8" fill="${BEACON}"/>
+  <rect x="0" y="0" width="1200" height="10" fill="${BEACON}"/>
 
-  <!-- beacon mark -->
-  <g transform="translate(80,86)">
-    <rect x="0" y="0" width="52" height="52" rx="12" fill="${INK2}" stroke="${LINE}"/>
-    <circle cx="26" cy="26" r="8" fill="${BEACON}"/>
-  </g>
-  <text x="148" y="120" font-family="ui-monospace, Menlo, monospace" font-size="26" fill="${FOG}">Christopher Manzano</text>
+  <!-- wordmark: accent rule + name, mirroring the site nav -->
+  <rect x="80" y="88" width="4" height="30" rx="2" fill="${BEACON}"/>
+  <text x="100" y="112" font-family="${SERIF}" font-size="27" font-weight="600" fill="${INK}">Christopher Manzano</text>
 
-  <text x="80" y="300" font-family="ui-monospace, Menlo, monospace" font-size="${fit(eyebrow, 26, "mono")}" letter-spacing="2" fill="${BEACON}">${esc(eyebrow)}</text>
-  <text x="80" y="392" font-family="Arial, Helvetica, sans-serif" font-size="${fit(title, 76, "sans")}" font-weight="700" fill="${FOG}">${esc(title)}</text>
-  <text x="80" y="470" font-family="Arial, Helvetica, sans-serif" font-size="${fit(subtitle, 34, "sans")}" fill="${FOG3}">${esc(subtitle)}</text>
+  <line x1="80" y1="168" x2="1120" y2="168" stroke="${LINE}" stroke-width="1"/>
 
-  <text x="80" y="576" font-family="ui-monospace, Menlo, monospace" font-size="24" fill="${FOG3}">manapple.dev</text>
+  <text x="80" y="268" font-family="${SANS}" font-size="${fit(eyebrow, 24, "sans")}" font-weight="600" letter-spacing="4" fill="${FOG4}">${esc(eyebrow.toUpperCase())}</text>
+  <text x="80" y="378" font-family="${SERIF}" font-size="${fit(title, 78, "serif")}" font-weight="600" fill="${INK}">${esc(title)}</text>
+  <text x="80" y="452" font-family="${SANS}" font-size="${fit(subtitle, 32, "sans")}" fill="${FOG3}">${esc(subtitle)}</text>
+
+  <line x1="80" y1="530" x2="1120" y2="530" stroke="${LINE}" stroke-width="1"/>
+  <text x="80" y="576" font-family="${SANS}" font-size="23" fill="${FOG4}">manapple.dev</text>
 </svg>`;
 }
 
 const pages = [
   {
     file: "default.png",
-    eyebrow: "// Data Scientist · AI Engineer",
+    eyebrow: "Data Scientist · AI Engineer",
     title: "Christopher Manzano",
     subtitle: "I build and operate production AI systems, end to end.",
   },
   {
     file: "warren.png",
-    eyebrow: "// project · warren",
+    eyebrow: "project · warren",
     title: "Multi-agent AI analyst",
     subtitle: "LangGraph + Gemini · quant, fundamentals and valuation.",
   },
   {
     file: "gollum.png",
-    eyebrow: "// project · gollum",
+    eyebrow: "project · gollum",
     title: "Auction tracker + alerts",
     subtitle: "Playwright scraping, quality-for-price ranking, LLM vision.",
   },
   {
     file: "services.png",
-    eyebrow: "// services",
+    eyebrow: "services",
     title: "Work with me",
     subtitle: "Talks, mentoring and freelance AI consulting · ES / EN.",
   },
   {
     file: "academia.png",
-    eyebrow: "// academia · bachelor thesis",
+    eyebrow: "academia · bachelor thesis",
     title: "Deep RL for portfolios",
     subtitle: "Soft Actor-Critic + TCN · UC3M thesis, 2023 · DOI on Zenodo.",
   },

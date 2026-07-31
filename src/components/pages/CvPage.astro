@@ -18,15 +18,15 @@ const cv = getCv(lang);
   <section class="mx-auto max-w-3xl px-6 pt-20 pb-16">
     <div class="flex flex-wrap items-end justify-between gap-4">
       <div>
-        <p class="eyebrow eyebrow-code mb-2">{t("cv.eyebrow")}</p>
-        <h1 class="text-3xl font-semibold text-fog-100 sm:text-4xl">{site.name}</h1>
+        <p class="eyebrow eyebrow-rule mb-2">{t("cv.eyebrow")}</p>
+        <h1 class="text-4xl text-fog-100 sm:text-5xl">{site.name}</h1>
         <p class="mt-2 text-fog-300">{site.role} · {site.location}</p>
       </div>
       {
         site.cvPdf && (
           <a
             href={site.cvPdf}
-            class="rounded-full border border-line bg-ink-800 px-4 py-2 text-sm text-fog-100 transition-colors hover:border-beacon/50 hover:text-beacon"
+            class="rounded-md border border-line bg-ink-800 px-4 py-2 text-sm text-fog-100 transition-colors hover:border-beacon/50 hover:text-beacon"
           >
             {t("cv.download")}
           </a>
@@ -38,7 +38,7 @@ const cv = getCv(lang);
 
     <div class="mt-12 space-y-12">
       <div>
-        <h2 class="mb-5 font-mono text-sm uppercase tracking-widest text-beacon">
+        <h2 class="mb-6 border-b border-line pb-2 text-2xl text-fog-100">
           {t("cv.experience")}
         </h2>
         <div class="space-y-8">
@@ -49,7 +49,7 @@ const cv = getCv(lang);
                   <h3 class="text-lg font-medium text-fog-100">
                     {job.role} · <span class="text-fog-300">{job.org}</span>
                   </h3>
-                  <span class="font-mono text-xs text-fog-400">{job.period}</span>
+                  <span class="numeric text-xs text-fog-400">{job.period}</span>
                 </div>
                 {job.summary && (
                   <p class="mt-2 text-sm leading-relaxed text-fog-300">{job.summary}</p>
@@ -76,7 +76,7 @@ const cv = getCv(lang);
       </div>
 
       <div>
-        <h2 class="mb-5 font-mono text-sm uppercase tracking-widest text-beacon">
+        <h2 class="mb-6 border-b border-line pb-2 text-2xl text-fog-100">
           {t("cv.education")}
         </h2>
         <div class="space-y-5">
@@ -87,7 +87,7 @@ const cv = getCv(lang);
                   <h3 class="font-medium text-fog-100">
                     {e.title} · <span class="text-fog-300">{e.org}</span>
                   </h3>
-                  <span class="font-mono text-xs text-fog-400">{e.period}</span>
+                  <span class="numeric text-xs text-fog-400">{e.period}</span>
                 </div>
                 {e.note && (
                   <p class="mt-1.5 text-sm text-fog-400">
@@ -112,19 +112,19 @@ const cv = getCv(lang);
       </div>
 
       <div>
-        <h2 class="mb-5 font-mono text-sm uppercase tracking-widest text-beacon">
+        <h2 class="mb-6 border-b border-line pb-2 text-2xl text-fog-100">
           {t("cv.skills")}
         </h2>
         <div class="space-y-4">
           {
             cv.skills.map((group) => (
               <div class="flex flex-col gap-2 sm:flex-row sm:gap-4">
-                <p class="shrink-0 pt-1 font-mono text-xs uppercase tracking-wider text-fog-400 sm:w-44">
+                <p class="eyebrow shrink-0 pt-1.5 sm:w-44">
                   {group.label}
                 </p>
                 <div class="flex flex-wrap gap-2">
                   {group.items.map((s) => (
-                    <span class="rounded-md border border-line bg-ink-850/60 px-3 py-1 font-mono text-xs text-fog-200">
+                    <span class="rounded-md border border-line bg-ink-850 px-3 py-1 text-xs text-fog-200">
                       {s}
                     </span>
                   ))}
@@ -136,7 +136,7 @@ const cv = getCv(lang);
       </div>
 
       <div>
-        <h2 class="mb-5 font-mono text-sm uppercase tracking-widest text-beacon">
+        <h2 class="mb-6 border-b border-line pb-2 text-2xl text-fog-100">
           {t("cv.languages")}
         </h2>
         <div class="flex flex-wrap gap-x-8 gap-y-2">

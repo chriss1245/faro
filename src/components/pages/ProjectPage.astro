@@ -48,15 +48,15 @@ const jsonLd = {
         {t("project.breadcrumb")}
       </a>
       <span class="px-2 text-fog-500">/</span>
-      <span class="text-fog-300 lowercase">{project.name}</span>
+      <span class="text-fog-300">{project.name}</span>
     </nav>
 
     <!-- Header -->
     <header>
       <div class="flex flex-wrap items-center gap-3">
-        <h1 class="font-mono text-3xl lowercase text-fog-100 sm:text-4xl">{project.name}</h1>
+        <h1 class="text-4xl text-fog-100 sm:text-5xl">{project.name}</h1>
         <span
-          class="rounded-full border border-aqua/40 px-2.5 py-0.5 text-xs font-medium text-aqua"
+          class="rounded-sm border border-aqua/45 px-2 py-0.5 text-[0.7rem] font-semibold uppercase tracking-wider text-aqua"
         >
           {statusLabel[project.status]}
         </span>
@@ -70,7 +70,7 @@ const jsonLd = {
               href={project.url}
               target="_blank"
               rel="noopener"
-              class="rounded-full bg-beacon px-5 py-2.5 text-sm font-semibold text-on-beacon transition-colors hover:bg-beacon-600"
+              class="rounded-md bg-beacon px-5 py-2.5 text-sm font-semibold text-on-beacon transition-colors hover:bg-beacon-600"
             >
               {t("project.launch")} {project.name}
             </a>
@@ -80,7 +80,7 @@ const jsonLd = {
           project.blogSlug && (
             <a
               href={`/writing/${project.blogSlug}`}
-              class="rounded-full border border-line bg-ink-800 px-5 py-2.5 text-sm font-medium text-fog-100 transition-colors hover:border-beacon/50 hover:text-beacon"
+              class="rounded-md border border-line bg-ink-800 px-5 py-2.5 text-sm font-medium text-fog-100 transition-colors hover:border-beacon/50 hover:text-beacon"
             >
               {t("project.readWriteup")}
             </a>
@@ -91,7 +91,7 @@ const jsonLd = {
 
     <!-- Overview -->
     <section class="mt-12">
-      <h2 class="eyebrow eyebrow-code mb-4">{t("project.overview")}</h2>
+      <h2 class="eyebrow eyebrow-rule mb-4">{t("project.overview")}</h2>
       <div class="space-y-4 leading-relaxed text-fog-300">
         {project.overview.map((p) => <p>{p}</p>)}
       </div>
@@ -99,7 +99,7 @@ const jsonLd = {
 
     <!-- Highlights -->
     <section class="mt-12">
-      <h2 class="eyebrow eyebrow-code mb-4">{t("project.howItWorks")}</h2>
+      <h2 class="eyebrow eyebrow-rule mb-4">{t("project.howItWorks")}</h2>
       <ul class="space-y-3">
         {
           project.highlights.map((h) => (
@@ -114,17 +114,17 @@ const jsonLd = {
 
     <!-- Stack -->
     <section class="mt-12">
-      <h2 class="eyebrow eyebrow-code mb-4">{t("project.stack")}</h2>
+      <h2 class="eyebrow eyebrow-rule mb-4">{t("project.stack")}</h2>
       <div class="grid gap-5 sm:grid-cols-2">
         {
           project.stack.map((group) => (
-            <div class="rounded-xl border border-line bg-ink-850/60 p-5">
-              <p class="mb-3 font-mono text-xs uppercase tracking-wide text-fog-400">
+            <div class="rounded-lg border border-line bg-ink-850 p-5">
+              <p class="eyebrow mb-3">
                 {group.label}
               </p>
               <div class="flex flex-wrap gap-1.5">
                 {group.items.map((it) => (
-                  <span class="rounded-md bg-ink-800 px-2 py-0.5 font-mono text-[0.7rem] text-fog-300">
+                  <span class="rounded-md bg-ink-800 px-2 py-0.5 text-[0.7rem] text-fog-300">
                     {it}
                   </span>
                 ))}

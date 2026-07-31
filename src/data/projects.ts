@@ -64,7 +64,7 @@ export interface Project extends Omit<ProjectDef, "stack" | "text">, ProjectText
 const definitions: ProjectDef[] = [
   {
     slug: "warren",
-    name: "warren",
+    name: "Warren",
     url: "https://warren.manapple.dev",
     blogSlug: "warren-investment-analyst",
     status: "live",
@@ -122,7 +122,7 @@ const definitions: ProjectDef[] = [
   },
   {
     slug: "gollum",
-    name: "gollum",
+    name: "Gollum",
     url: "https://gollum.manapple.dev",
     blogSlug: "gollum-auction-tracker",
     status: "live",

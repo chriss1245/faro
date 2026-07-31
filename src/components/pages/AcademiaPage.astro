@@ -54,8 +54,8 @@ const citationYear = new Date(thesis.datePublished).getFullYear();
   <div class="mx-auto max-w-3xl px-6 pt-20 pb-20">
     <!-- Intro -->
     <header>
-      <p class="eyebrow eyebrow-code mb-4">{t("academia.eyebrow")}</p>
-      <h1 class="text-3xl font-semibold leading-tight text-fog-100 sm:text-4xl">
+      <p class="eyebrow eyebrow-rule mb-4">{t("academia.eyebrow")}</p>
+      <h1 class="text-4xl leading-tight text-fog-100 sm:text-5xl">
         {t("academia.title")}
       </h1>
       <p class="mt-5 text-lg leading-relaxed text-fog-300">{thesis.summary}</p>
@@ -63,16 +63,16 @@ const citationYear = new Date(thesis.datePublished).getFullYear();
 
     <!-- Featured: the thesis -->
     <section class="mt-14" aria-labelledby="thesis-title">
-      <h2 class="eyebrow eyebrow-code mb-4">{t("academia.thesisEyebrow")}</h2>
+      <h2 class="eyebrow eyebrow-rule mb-4">{t("academia.thesisEyebrow")}</h2>
 
-      <article class="rounded-2xl border border-line bg-ink-850/60 p-6 sm:p-8">
+      <article class="rounded-lg border border-line bg-ink-850 p-6 sm:p-8">
         <div class="flex flex-wrap items-center gap-2.5">
           <span
-            class="rounded-full border border-aqua/40 px-2.5 py-0.5 text-xs font-medium text-aqua"
+            class="rounded-sm border border-aqua/45 px-2 py-0.5 text-[0.7rem] font-semibold uppercase tracking-wider text-aqua"
           >
             {thesis.kind}
           </span>
-          <span class="font-mono text-xs text-fog-400">
+          <span class="numeric text-xs text-fog-400">
             <time datetime={thesis.datePublished}>{thesis.defended}</time>
           </span>
         </div>
@@ -105,7 +105,7 @@ const citationYear = new Date(thesis.datePublished).getFullYear();
             <dd>
               <a
                 href={doiUrl}
-                class="link-underline font-mono text-beacon"
+                class="link-underline numeric text-beacon"
                 target="_blank"
                 rel="noopener"
               >
@@ -121,7 +121,7 @@ const citationYear = new Date(thesis.datePublished).getFullYear();
             href={thesis.pdfUrl}
             target="_blank"
             rel="noopener"
-            class="rounded-full bg-beacon px-5 py-2.5 text-sm font-semibold text-on-beacon transition-colors hover:bg-beacon-600"
+            class="rounded-md bg-beacon px-5 py-2.5 text-sm font-semibold text-on-beacon transition-colors hover:bg-beacon-600"
           >
             {t("academia.readPdf")}
           </a>
@@ -129,7 +129,7 @@ const citationYear = new Date(thesis.datePublished).getFullYear();
             href={thesis.recordUrl}
             target="_blank"
             rel="noopener"
-            class="rounded-full border border-line bg-ink-800 px-5 py-2.5 text-sm font-medium text-fog-100 transition-colors hover:border-beacon/50 hover:text-beacon"
+            class="rounded-md border border-line bg-ink-800 px-5 py-2.5 text-sm font-medium text-fog-100 transition-colors hover:border-beacon/50 hover:text-beacon"
           >
             {t("academia.record")}
           </a>
@@ -139,7 +139,7 @@ const citationYear = new Date(thesis.datePublished).getFullYear();
                 href={thesis.codeUrl}
                 target="_blank"
                 rel="noopener"
-                class="rounded-full border border-line bg-ink-800 px-5 py-2.5 text-sm font-medium text-fog-100 transition-colors hover:border-beacon/50 hover:text-beacon"
+                class="rounded-md border border-line bg-ink-800 px-5 py-2.5 text-sm font-medium text-fog-100 transition-colors hover:border-beacon/50 hover:text-beacon"
               >
                 {t("academia.code")}
               </a>
@@ -153,7 +153,7 @@ const citationYear = new Date(thesis.datePublished).getFullYear();
         </div>
 
         <!-- Contributions -->
-        <h4 class="eyebrow eyebrow-code mt-9 mb-4">{t("academia.contributions")}</h4>
+        <h4 class="eyebrow eyebrow-rule mt-9 mb-4">{t("academia.contributions")}</h4>
         <ul class="space-y-3">
           {
             thesis.contributions.map((c) => (
@@ -169,12 +169,12 @@ const citationYear = new Date(thesis.datePublished).getFullYear();
         </ul>
 
         <!-- Evaluation setup -->
-        <h4 class="eyebrow eyebrow-code mt-9 mb-4">{t("academia.evaluation")}</h4>
-        <dl class="divide-y divide-line/70 overflow-hidden rounded-xl border border-line">
+        <h4 class="eyebrow eyebrow-rule mt-9 mb-4">{t("academia.evaluation")}</h4>
+        <dl class="divide-y divide-line/70 overflow-hidden rounded-lg border border-line">
           {
             thesis.evaluation.map((row) => (
               <div class="flex flex-col gap-1 px-4 py-3 sm:flex-row sm:gap-4">
-                <dt class="font-mono text-xs uppercase tracking-wide text-fog-400 sm:w-48 sm:shrink-0 sm:pt-0.5">
+                <dt class="numeric text-xs uppercase tracking-wide text-fog-400 sm:w-48 sm:shrink-0 sm:pt-0.5">
                   {row.label}
                 </dt>
                 <dd class="text-sm text-fog-200">{row.value}</dd>
@@ -187,7 +187,7 @@ const citationYear = new Date(thesis.datePublished).getFullYear();
         <div class="mt-8 flex flex-wrap gap-1.5">
           {
             thesis.keywords.map((k) => (
-              <span class="rounded-md bg-ink-800 px-2 py-0.5 font-mono text-[0.7rem] text-fog-300">
+              <span class="rounded-md bg-ink-800 px-2 py-0.5 text-[0.7rem] text-fog-300">
                 {k}
               </span>
             ))
@@ -211,22 +211,22 @@ const citationYear = new Date(thesis.datePublished).getFullYear();
 
     <!-- Case studies -->
     <section class="mt-16">
-      <h2 class="eyebrow eyebrow-code mb-6">{t("academia.caseStudies")}</h2>
+      <h2 class="eyebrow eyebrow-rule mb-6">{t("academia.caseStudies")}</h2>
 
       <div class="space-y-4">
         {
           academicProjects.map((p) => (
-            <article class="card-hover rounded-2xl border border-line bg-ink-850/60 p-6">
+            <article class="card-hover rounded-lg border border-line bg-ink-850 p-6">
               <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
                 <h3 class="text-lg font-semibold text-fog-100">{p.title}</h3>
-                <span class="font-mono text-xs text-fog-400">{p.year}</span>
+                <span class="numeric text-xs text-fog-400">{p.year}</span>
               </div>
               <p class="mt-1 text-xs uppercase tracking-wide text-fog-400">{p.context}</p>
               <p class="mt-3 text-sm leading-relaxed text-fog-300">{p.description}</p>
 
               <div class="mt-4 flex flex-wrap gap-1.5">
                 {p.methods.map((m) => (
-                  <span class="rounded-md bg-ink-800 px-2 py-0.5 font-mono text-[0.7rem] text-fog-300">
+                  <span class="rounded-md bg-ink-800 px-2 py-0.5 text-[0.7rem] text-fog-300">
                     {m}
                   </span>
                 ))}

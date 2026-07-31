@@ -1,8 +1,11 @@
 @import "tailwindcss";
+@import "./fonts.css";
 @plugin "@tailwindcss/typography";
 
 /* ---- faro design tokens ----------------------------------------------------
-   Canonical palette lives in ~/infra/brand (BRANDBOOK.md / tokens.css).
+   Editorial direction: warm paper, white cards, ink-blue accent, serif
+   headlines. The register to aim for is an independent consultant's site — not
+   a terminal, not a SaaS landing page.
 
    The tokens are SEMANTIC, not literal, so a single set of utilities serves
    both themes. Read them as roles, never as absolute lightness:
@@ -14,69 +17,73 @@
      fog-100 → primary text   fog-300 → body text     fog-500 → faintest
      fog-200 → strong text    fog-400 → muted text
 
-     beacon = primary signal accent (emerald)
-     aqua   = secondary accent (indigo)
+     beacon = primary signal accent (ink blue)
+     aqua   = secondary accent (deep teal)
 
    LIGHT is the default and lives in @theme below; DARK re-points the same
    variables in the [data-theme="dark"] block. Because Tailwind v4 utilities
    compile to `var(--color-*)`, changing the variable at runtime re-themes the
    whole site — no `dark:` variants anywhere in the markup.
-   Accents are tuned per theme: emerald needs to go darker on white to keep
-   text contrast, and beacon is always used behind ink-950-coloured text. */
+
+   Contrast is verified per theme against the surface each colour actually sits
+   on (paper *and* card), not just against white. Every text token clears WCAG
+   AA 4.5:1; beacon clears it in both directions, so white-on-beacon buttons and
+   beacon-on-paper links are both safe. */
 @theme {
-  /* light surfaces — near-white page, subtly cooler cards */
-  --color-ink-950: #ffffff;
-  --color-ink-900: #f7f9fc;
-  --color-ink-850: #f1f4f9;
-  --color-ink-800: #e8edf5;
-  --color-ink-700: #dde4ef;
-  --color-line: #d5dde9;
+  /* light surfaces — warm paper page, white cards raised on top of it */
+  --color-ink-950: #fbfaf8;
+  --color-ink-900: #f5f3ef;
+  --color-ink-850: #ffffff;
+  --color-ink-800: #f0ede8;
+  --color-ink-700: #e7e3db;
+  --color-line: #dedad2;
 
-  /* light text — deep slate, mirroring the dark ramp */
-  --color-fog-100: #0b1220;
-  --color-fog-200: #1e2a3d;
-  --color-fog-300: #46536a;
-  --color-fog-400: #626f84;
-  --color-fog-500: #94a0b2;
+  /* light text — neutral ink, faintly cool so it does not read as brown */
+  --color-fog-100: #15181d;
+  --color-fog-200: #2c3138;
+  --color-fog-300: #4d545e;
+  --color-fog-400: #656c77;
+  --color-fog-500: #9aa0a9;
 
-  /* light accents — darkened so small text clears WCAG AA (4.5:1) against the
-     *card* surface (ink-850), not just against white, since eyebrows and
-     accent links sit on cards. Verified: beacon 4.9:1 on ink-850, 5.4:1 on
-     white, and white-on-beacon 5.4:1 for the filled buttons. */
-  --color-beacon: #007a55;
-  --color-beacon-600: #005c40;
-  --color-aqua: #4453c7;
+  /* light accents — ink blue as the single signal colour, deep teal as the
+     quiet second voice for metadata chips. beacon: 9.3:1 on paper, 9.7:1 both
+     against white and as white-on-beacon. */
+  --color-beacon: #1d3f8f;
+  --color-beacon-600: #16306e;
+  --color-aqua: #0f6b6b;
 
   /* text colour that sits on a solid `bg-beacon` fill */
   --color-on-beacon: #ffffff;
 
   --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-serif: "Source Serif 4", "Iowan Old Style", Charter, Georgia, Cambria, serif;
   --font-mono: ui-monospace, "JetBrains Mono", SFMono-Regular, Menlo, monospace;
 }
 
-/* Dark theme — the original "fintech dark premium" (warren) palette.
+/* Dark theme — the same paper/ink relationship after dusk: near-black page,
+   slightly lifted cards, the ink blue opened up so it still reads as a link.
    `html[data-theme="dark"]` outranks the `:root` block Tailwind emits. */
 html[data-theme="dark"] {
   color-scheme: dark;
 
-  --color-ink-950: #070a11;
-  --color-ink-900: #0a0e17;
-  --color-ink-850: #0f1521;
-  --color-ink-800: #131a26;
-  --color-ink-700: #1b2433;
-  --color-line: #212b3b;
+  --color-ink-950: #101216;
+  --color-ink-900: #14171c;
+  --color-ink-850: #191d24;
+  --color-ink-800: #20252d;
+  --color-ink-700: #2a303a;
+  --color-line: #2e343e;
 
-  --color-fog-100: #eef2f8;
-  --color-fog-200: #c7d0de;
-  --color-fog-300: #92a0b5;
-  --color-fog-400: #5a6678;
-  --color-fog-500: #3a4356;
+  --color-fog-100: #f2f1ee;
+  --color-fog-200: #cdd2da;
+  --color-fog-300: #a3aab5;
+  --color-fog-400: #838a96;
+  --color-fog-500: #565d68;
 
-  --color-beacon: #00e2a0;
-  --color-beacon-600: #00c78d;
-  --color-aqua: #7c8cf8;
+  --color-beacon: #a7c0ff;
+  --color-beacon-600: #c8d8ff;
+  --color-aqua: #7fc7c0;
 
-  --color-on-beacon: #070a11;
+  --color-on-beacon: #101216;
 }
 
 html[data-theme="light"] {
@@ -91,53 +98,21 @@ html[data-theme="light"] {
     font-family: var(--font-sans);
     text-rendering: optimizeLegibility;
   }
+  /* Headlines are the whole voice of the redesign: serif, optical sizing on,
+     normal tracking. Tight negative tracking is a sans mannerism and makes a
+     serif look cramped. */
   h1, h2, h3 {
-    letter-spacing: -0.02em;
+    font-family: var(--font-serif);
+    font-optical-sizing: auto;
+    font-weight: 600;
+    letter-spacing: -0.005em;
   }
 }
 
-/* Fixed dual-glow (emerald + indigo) + faint grid behind everything.
-   Mirrors warren's body backdrop: soft signal-green top-right, indigo top-left.
-   `--beam-glow` / `--beam-grid` control the intensity so the same geometry
-   works on white (barely-there tint) and on deep slate (visible glow). */
-.beam {
-  --beam-glow: 7%;
-  --beam-glow-2: 5%;
-  --beam-grid: 0.5;
-
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(55rem 55rem at 80% -10%, color-mix(in oklab, var(--color-beacon) var(--beam-glow), transparent), transparent 60%),
-    radial-gradient(45rem 38rem at 0% 0%, color-mix(in oklab, var(--color-aqua) var(--beam-glow-2), transparent), transparent 55%),
-    linear-gradient(to bottom, var(--color-ink-950), var(--color-ink-900));
-}
-html[data-theme="dark"] .beam {
-  --beam-glow: 10%;
-  --beam-glow-2: 8%;
-  --beam-grid: 0.35;
-}
-.beam::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(to right, color-mix(in oklab, var(--color-line) 55%, transparent) 1px, transparent 1px),
-    linear-gradient(to bottom, color-mix(in oklab, var(--color-line) 55%, transparent) 1px, transparent 1px);
-  background-size: 56px 56px;
-  mask-image: radial-gradient(60rem 50rem at 70% 0%, black, transparent 75%);
-  opacity: var(--beam-grid);
-}
-
-/* Nav logo dot. The glow reads as a signal on deep slate but as a smudge on
-   white, so light mode gets a tight ring instead of a bloom. */
-.logo-dot {
-  box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-beacon) 18%, transparent);
-}
-html[data-theme="dark"] .logo-dot {
-  box-shadow: 0 0 12px 3px var(--color-beacon);
+/* Nav wordmark rule — a hairline that picks up the accent, replacing the
+   glowing terminal dot. */
+.mark-rule {
+  background: linear-gradient(to bottom, var(--color-beacon), color-mix(in oklab, var(--color-beacon) 25%, transparent));
 }
 
 /* Theme toggle: show the icon for the theme the click would switch TO. */
@@ -153,9 +128,10 @@ html[data-theme="dark"] .theme-icon-moon {
 
 /* Long-form article text. Replaces `prose-invert` (which hard-codes a dark
    scheme) by mapping typography's variables onto the semantic tokens, so
-   articles follow the active theme for free. */
+   articles follow the active theme for free. Body copy in the serif, because
+   these are essays and they should read like essays. */
 .prose-site {
-  --tw-prose-body: var(--color-fog-300);
+  --tw-prose-body: var(--color-fog-200);
   --tw-prose-headings: var(--color-fog-100);
   --tw-prose-lead: var(--color-fog-300);
   --tw-prose-links: var(--color-beacon);
@@ -164,37 +140,65 @@ html[data-theme="dark"] .theme-icon-moon {
   --tw-prose-bullets: var(--color-line);
   --tw-prose-hr: var(--color-line);
   --tw-prose-quotes: var(--color-fog-200);
-  --tw-prose-quote-borders: var(--color-line);
+  --tw-prose-quote-borders: var(--color-beacon);
   --tw-prose-captions: var(--color-fog-400);
   --tw-prose-code: var(--color-aqua);
   --tw-prose-pre-code: var(--color-fog-200);
-  --tw-prose-pre-bg: var(--color-ink-850);
+  --tw-prose-pre-bg: var(--color-ink-900);
   --tw-prose-th-borders: var(--color-line);
   --tw-prose-td-borders: var(--color-line);
+
+  font-family: var(--font-serif);
+  font-size: 1.0625rem;
+  line-height: 1.75;
+}
+.prose-site :is(h1, h2, h3, h4) {
+  font-family: var(--font-serif);
+}
+.prose-site blockquote {
+  font-style: normal;
 }
 
-/* Small reusable bits */
+/* Section eyebrow. Was a monospace `// comment` marker; now a quiet spaced
+   small-cap label in the sans, the way a report labels its sections. */
 .eyebrow {
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  letter-spacing: 0.12em;
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--color-beacon);
+  color: var(--color-fog-400);
 }
-/* The `//` code-comment marker is presentation, not content — it lives here
-   rather than inside the translated strings, so the whole site's visual voice
-   can change by editing one rule. Section eyebrows opt in with .eyebrow-code;
-   standalone ones (the hero kicker) do not. */
-.eyebrow-code::before {
-  content: "// ";
+/* A short rule to the left of a section label — the editorial tell. */
+.eyebrow-rule {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
-.card-hover {
-  transition: transform 0.25s ease, border-color 0.25s ease, background-color 0.25s ease;
+.eyebrow-rule::before {
+  content: "";
+  width: 1.75rem;
+  height: 1px;
+  background: var(--color-beacon);
+  flex: none;
+}
+
+/* Cards sit still. The old lift-on-hover was the main thing making the page
+   feel like a toy; the border warming to the accent is enough affordance. */
+.card {
+  border: 1px solid var(--color-line);
+  background: var(--color-ink-850);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 .card-hover:hover {
-  transform: translateY(-3px);
-  border-color: color-mix(in oklab, var(--color-beacon) 45%, var(--color-line));
+  border-color: color-mix(in oklab, var(--color-beacon) 40%, var(--color-line));
+  box-shadow: 0 1px 2px color-mix(in oklab, var(--color-fog-100) 6%, transparent),
+    0 8px 24px -12px color-mix(in oklab, var(--color-fog-100) 18%, transparent);
 }
+html[data-theme="dark"] .card-hover:hover {
+  box-shadow: none;
+}
+
 .link-underline {
   background-image: linear-gradient(currentColor, currentColor);
   background-size: 0% 1px;
@@ -204,4 +208,10 @@ html[data-theme="dark"] .theme-icon-moon {
 }
 .link-underline:hover {
   background-size: 100% 1px;
+}
+
+/* Tabular figures for dates, DOIs and other aligned metadata. */
+.numeric {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
 }

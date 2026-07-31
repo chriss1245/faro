@@ -24,14 +24,14 @@ const postsAreForeign = lang !== defaultLang;
 
 <Layout lang={lang} title={t("writing.title")} description={t("writing.seoDescription")}>
   <section class="mx-auto max-w-3xl px-6 pt-20 pb-16">
-    <p class="eyebrow eyebrow-code mb-2">{t("writing.eyebrow")}</p>
-    <h1 class="text-3xl font-semibold text-fog-100 sm:text-4xl">{t("writing.heading")}</h1>
+    <p class="eyebrow eyebrow-rule mb-2">{t("writing.eyebrow")}</p>
+    <h1 class="text-4xl text-fog-100 sm:text-5xl">{t("writing.heading")}</h1>
     <p class="mt-3 max-w-xl text-fog-300">{t("writing.lead")}</p>
 
     {
       postsAreForeign && (
         <p
-          class="mt-6 rounded-xl border border-line bg-ink-850/60 px-4 py-3 text-sm leading-relaxed text-fog-400"
+          class="mt-6 rounded-lg border border-line bg-ink-850 px-4 py-3 text-sm leading-relaxed text-fog-400"
           role="note"
         >
           {t("writing.englishOnlyNotice")}
@@ -44,7 +44,7 @@ const postsAreForeign = lang !== defaultLang;
       {
         posts.map((post) => (
           <a href={`/writing/${post.id}`} class="group flex flex-col gap-1 py-6" hreflang="en">
-            <span class="font-mono text-xs text-fog-400">{fmt(post.data.date)}</span>
+            <span class="numeric text-xs text-fog-400">{fmt(post.data.date)}</span>
             <h2
               lang="en"
               class="text-xl font-medium text-fog-100 transition-colors group-hover:text-beacon"

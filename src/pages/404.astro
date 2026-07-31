@@ -10,7 +10,7 @@ const langs = Object.keys(languages) as Lang[];
 
 <Layout lang={defaultLang} title="Not found" description="This page drifted off the map." singleLocale>
   <section class="mx-auto max-w-3xl px-6 py-32 text-center">
-    <p class="eyebrow eyebrow-code mb-4">404</p>
+    <p class="eyebrow mb-4">404</p>
     {
       langs.map((l, i) => {
         const t = useTranslations(l);
@@ -27,7 +27,7 @@ const langs = Object.keys(languages) as Lang[];
             <p class="mt-4 text-fog-300">{t("notFound.body")}</p>
             <a
               href={localizePath("/", l)}
-              class="mt-6 inline-block rounded-full bg-beacon px-5 py-2.5 text-sm font-semibold text-on-beacon transition-colors hover:bg-beacon-600"
+              class="mt-6 inline-block rounded-md bg-beacon px-5 py-2.5 text-sm font-semibold text-on-beacon transition-colors hover:bg-beacon-600"
             >
               {t("notFound.cta")}
             </a>

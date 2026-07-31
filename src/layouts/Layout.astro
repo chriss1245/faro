@@ -80,9 +80,26 @@ const alternates = singleLocale
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#070a11" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#fbfaf8" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#101216" media="(prefers-color-scheme: dark)" />
     <meta name="generator" content={Astro.generator} />
+
+    <!-- The two faces every page paints with. Self-hosted, so preloading them
+         costs one round trip and removes the swap flash on the headline. -->
+    <link
+      rel="preload"
+      href="/fonts/source-serif-4-normal-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/inter-normal-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
 
     <title>{fullTitle}</title>
     <meta name="description" content={desc} />
@@ -134,8 +151,7 @@ const alternates = singleLocale
   <body
     class="min-h-screen bg-ink-950 text-fog-100 antialiased selection:bg-beacon/30 selection:text-fog-100"
   >
-    <div class="beam" aria-hidden="true"></div>
-    <div class="relative z-10 flex min-h-screen flex-col">
+    <div class="flex min-h-screen flex-col">
       <Nav lang={lang} />
       <main class="flex-1"><slot /></main>
       <Footer lang={lang} />
