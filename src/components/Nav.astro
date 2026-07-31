@@ -31,15 +31,19 @@ const links = [
       aria-label={`${site.name} — ${t("nav.home")}`}
     >
       <span class="mark-rule h-6 w-[3px] shrink-0 rounded-full" aria-hidden="true"></span>
-      <span class="font-serif text-[0.95rem] font-semibold text-fog-100 sm:text-base"
+      <!-- The full wordmark eats the whole bar on a phone and pushes the
+           language and theme controls off-screen, so narrow viewports get the
+           initials instead. -->
+      <span class="font-serif text-base font-semibold text-fog-100 sm:hidden">CM</span>
+      <span class="hidden font-serif text-base font-semibold text-fog-100 sm:inline"
         >Christopher Manzano</span
       >
     </a>
 
-    <div class="flex items-center gap-3 text-sm text-fog-300 sm:gap-5">
+    <div class="flex min-w-0 items-center gap-3 text-sm text-fog-300 sm:gap-5">
       <!-- The link row scrolls sideways on narrow phones instead of wrapping
            under the logo, which kept the sticky header two rows tall. -->
-      <div class="flex items-center gap-3.5 overflow-x-auto sm:gap-5 [scrollbar-width:none]">
+      <div class="flex min-w-0 items-center gap-3.5 overflow-x-auto sm:gap-5 [scrollbar-width:none]">
         {
           links.map((l) => (
             <a
