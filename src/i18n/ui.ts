@@ -87,6 +87,7 @@ const en = {
   "services.rateOnRequest": "On request",
   "services.formatLabel": "Format",
   "services.cta": "Ask about this",
+  "services.faqTitle": "Questions people ask first",
   "services.contactTitle": "Something else in mind?",
   "services.contactBody":
     "If your case does not fit neatly into one of these, write to me anyway and we will figure out the right shape.",
@@ -210,6 +211,7 @@ const es: UIDict = {
   "services.rateOnRequest": "A consultar",
   "services.formatLabel": "Formato",
   "services.cta": "Preguntar por esto",
+  "services.faqTitle": "Lo que preguntan antes de escribir",
   "services.contactTitle": "¿Tienes otra cosa en mente?",
   "services.contactBody":
     "Si tu caso no encaja del todo en ninguno de estos, escríbeme igualmente y le damos la forma que necesite.",

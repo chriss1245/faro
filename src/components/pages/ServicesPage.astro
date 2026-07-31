@@ -2,7 +2,7 @@
 import Layout from "../../layouts/Layout.astro";
 import ServiceCard from "../ServiceCard.astro";
 import { getSite } from "../../data/site";
-import { getServices, servicesIntro } from "../../data/services";
+import { getServices, servicesIntro, faq } from "../../data/services";
 import type { Lang } from "../../i18n/config";
 import { useTranslations } from "../../i18n/ui";
 
@@ -14,6 +14,7 @@ const t = useTranslations(lang);
 const site = getSite(lang);
 const services = getServices(lang);
 const intro = servicesIntro[lang];
+const questions = faq[lang];
 
 // One Service entity per offering, so search engines can surface them as
 // distinct services rather than as one page about "consulting".
@@ -35,6 +36,18 @@ const servicesLd = {
     },
   })),
 };
+
+// FAQPage — a direct question followed by a direct answer is the format answer
+// engines extract most reliably, and it doubles as pre-sales friction removal.
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: questions.map((item) => ({
+    "@type": "Question",
+    name: item.q,
+    acceptedAnswer: { "@type": "Answer", text: item.a },
+  })),
+};
 ---
 
 <Layout
@@ -44,6 +57,7 @@ const servicesLd = {
   image="/og/services.png"
 >
   <script type="application/ld+json" slot="head" set:html={JSON.stringify(servicesLd)} />
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(faqLd)} />
 
   <div class="mx-auto max-w-5xl px-6 pt-20 pb-20">
     <header class="max-w-2xl">
@@ -57,6 +71,22 @@ const servicesLd = {
     <div class="mt-14 space-y-6">
       {services.map((service) => <ServiceCard service={service} lang={lang} email={site.email} />)}
     </div>
+
+    <!-- Answers rendered as plain visible prose, not collapsed into <details>:
+         the text is the point, for readers and for extraction alike. -->
+    <section class="mt-20">
+      <h2 class="text-2xl text-fog-100 sm:text-3xl">{t("services.faqTitle")}</h2>
+      <dl class="mt-8 space-y-8">
+        {
+          questions.map((item) => (
+            <div class="border-t border-line pt-6">
+              <dt class="text-base font-semibold text-fog-100">{item.q}</dt>
+              <dd class="mt-2.5 max-w-2xl text-sm leading-relaxed text-fog-400">{item.a}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </section>
 
     <!-- Catch-all for enquiries that fit none of the three -->
     <div

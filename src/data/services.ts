@@ -143,6 +143,80 @@ export const getServices = (lang: Lang) =>
 export type Service = ReturnType<typeof getServices>[number];
 
 /** Page-level intro copy for /services. */
+/**
+ * Questions people actually ask before enquiring.
+ *
+ * This block does double duty: it removes the friction that stops someone
+ * sending the first email, and it is the single most extractable format for
+ * AI answer engines — a direct question followed by a direct answer. It is
+ * rendered as `FAQPage` JSON-LD on the services page.
+ *
+ * Keep answers factual and first-person. No invented figures: anything about
+ * rates stays "quoted per engagement" until there is a public number to give.
+ */
+export const faq: Record<Lang, { q: string; a: string }[]> = {
+  en: [
+    {
+      q: "What kind of work do you take on?",
+      a: "Three things: talks and workshops, one-to-one mentoring, and freelance consulting on production AI. The consulting work is usually one of two shapes — a system that works in a notebook and needs to become something you can run and be on call for, or a model already in production that nobody can quite explain or afford.",
+    },
+    {
+      q: "Do you work remotely?",
+      a: "Yes. I'm based in Madrid, Spain, and work remotely with teams anywhere in a compatible timezone. For talks and workshops I also travel on-site.",
+    },
+    {
+      q: "What languages do you work in?",
+      a: "Spanish and English, both fully. Talks, workshops and written deliverables are available in either.",
+    },
+    {
+      q: "How do you price your work?",
+      a: "Per engagement rather than from a public rate card, because a 45-minute talk and a multi-week consulting engagement are not the same unit. Tell me the shape of the problem and I'll come back with a scope and a price.",
+    },
+    {
+      q: "What does a typical engagement look like?",
+      a: "It starts with a short call to work out whether I'm actually the right person — I'd rather say no early than bill you to find out. From there, a written scope with a defined deliverable. Talks run from 45 minutes to a full-day hands-on workshop, and workshops leave the team with a repository they keep.",
+    },
+    {
+      q: "What technologies do you work with?",
+      a: "Python across the board. LangGraph and multi-agent orchestration, LLM APIs with structured output, FastAPI services, and the operational half — containerised deploys, reverse proxying, SSO, Postgres, and CI that ships on push. I also come from a quantitative background: reinforcement learning, valuation models and time series.",
+    },
+    {
+      q: "Can I see something you've actually built?",
+      a: "Yes, and without creating an account. Warren and Gollum are both live and both have a read-only guest mode, so you can follow the full reasoning end to end. The write-ups on the blog cover the architecture decisions behind them.",
+    },
+  ],
+  es: [
+    {
+      q: "¿Qué tipo de trabajo aceptas?",
+      a: "Tres cosas: charlas y talleres, mentoría individual y consultoría freelance sobre IA en producción. La consultoría suele tener una de dos formas — un sistema que funciona en un notebook y necesita convertirse en algo que puedas operar y del que estés de guardia, o un modelo ya en producción que nadie sabe explicar del todo o cuyo coste se ha ido de las manos.",
+    },
+    {
+      q: "¿Trabajas en remoto?",
+      a: "Sí. Estoy en Madrid, España, y trabajo en remoto con equipos en cualquier franja horaria compatible. Para charlas y talleres también me desplazo presencialmente.",
+    },
+    {
+      q: "¿En qué idiomas trabajas?",
+      a: "Español e inglés, ambos sin limitaciones. Las charlas, los talleres y las entregas escritas están disponibles en cualquiera de los dos.",
+    },
+    {
+      q: "¿Cómo calculas el precio?",
+      a: "Por encargo, no con una tarifa pública, porque una charla de 45 minutos y una consultoría de varias semanas no son la misma unidad. Cuéntame la forma del problema y te respondo con un alcance y un precio.",
+    },
+    {
+      q: "¿Cómo es un encargo típico?",
+      a: "Empieza con una llamada corta para averiguar si soy de verdad la persona adecuada — prefiero decir que no pronto antes que cobrarte por descubrirlo. A partir de ahí, un alcance por escrito con un entregable definido. Las charlas van desde 45 minutos hasta un taller práctico de día completo, y los talleres dejan al equipo un repositorio que se queda.",
+    },
+    {
+      q: "¿Con qué tecnologías trabajas?",
+      a: "Python de principio a fin. LangGraph y orquestación multiagente, APIs de LLMs con salida estructurada, servicios en FastAPI, y la mitad operativa — despliegues en contenedores, proxy inverso, SSO, Postgres y CI que despliega al hacer push. Además vengo de un perfil cuantitativo: aprendizaje por refuerzo, modelos de valoración y series temporales.",
+    },
+    {
+      q: "¿Puedo ver algo que hayas construido de verdad?",
+      a: "Sí, y sin crearte una cuenta. Warren y Gollum están funcionando y ambos tienen modo invitado en solo lectura, así que puedes seguir el razonamiento completo. Los artículos del blog explican las decisiones de arquitectura que hay detrás.",
+    },
+  ],
+};
+
 export const servicesIntro: Record<Lang, { lead: string; seoDescription: string }> = {
   en: {
     lead: "I work with teams that need AI systems to actually reach production — and with people who want to build them. Talks, mentoring and consulting, in Spanish or English.",
