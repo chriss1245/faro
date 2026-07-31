@@ -15,9 +15,22 @@ external profiles).
 - **`robots.txt`** allowing crawl and pointing at the sitemap.
 - OG share images at `public/og/*.png` (regenerate with `node scripts/gen-og.mjs`).
 
-> Note on robots.txt: Cloudflare injects a "Managed content" block into the served
-> robots.txt. Googlebot (search) is allowed; only AI-training bots are blocked.
-> Our own `Sitemap:` line and `Allow: /` are still served.
+> **Note on robots.txt (resolved 2026-07-31).** Cloudflare *used to* inject a
+> "Managed content" block into the served robots.txt. The earlier note here
+> claimed "only AI-training bots are blocked" — that understated it: the block
+> also disallowed `Google-Extended` (Gemini training **and grounding**) and
+> `ClaudeBot`, and set `Content-Signal: ai-train=no`. Because a named user-agent
+> group beats the wildcard group, our own `Allow: /` below it did nothing for
+> those bots.
+>
+> Fixed via the Cloudflare API on the zone's `bot_management` settings:
+> `is_robots_txt_managed: false` and `ai_bots_protection: "disabled"`. The served
+> robots.txt is now exactly the one in `public/`. Re-check with
+> `curl -s https://manapple.dev/robots.txt` if AI referrals ever dry up — the
+> managed block can be re-enabled from the dashboard by accident.
+>
+> Deliberate decision: **AI training crawlers are allowed.** The goal is for
+> models to know who Christopher Manzano is, not merely to retrieve him.
 
 ## 1. Google Search Console (do this first)
 
@@ -65,6 +78,24 @@ project repos are **public**, add "Source" links:
 - [ ] In each repo's README, add a link back to `https://manapple.dev/<project>`.
 
 Don't add repo links for private repos (they'd 404 for visitors).
+
+## 4. AI visibility (GEO/AEO) — separate from Google
+
+Being *recommended* by ChatGPT/Gemini/Claude is mostly an **off-site** problem.
+For recommendation-style prompts, 40%+ of cited URLs are third-party "best of"
+lists; own-site copy is the weakest signal. Ranked by leverage:
+
+- [ ] Zenodo thesis record (DOI 10.5281/zenodo.21541556) links `manapple.dev`.
+- [ ] Substantive answers in r/MLOps, r/datascience, r/LocalLLaMA with the site
+      in the profile. Forum content is retrieved disproportionately often.
+- [ ] Get listed on pages we don't control: Madrid/Spain AI-consultant
+      directories, speaker pages, "engineers to follow" roundups.
+- [ ] Public repo READMEs linking back to `manapple.dev/<project>` (see §3).
+- [ ] On-site: lead each page with a directly extractable sentence stating who /
+      what / for whom / where. Models lift sentences, not slogans.
+
+**Skip `llms.txt`.** Field data across ~500M AI bot requests shows the major
+crawlers essentially never fetch it; they read HTML. Not worth the time.
 
 ## Verifying after deploy
 
