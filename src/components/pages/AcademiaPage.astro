@@ -33,7 +33,17 @@ const thesisLd = {
   url: new URL(localizePath("/academia", lang), Astro.site).href,
   keywords: thesis.keywords.join(", "),
   license: thesis.licenseUrl,
-  author: { "@type": "Person", name: site.name, url: `https://${site.domain}` },
+  author: {
+    "@type": "Person",
+    name: site.name,
+    url: `https://${site.domain}`,
+    sameAs: `https://orcid.org/${site.orcid}`,
+    identifier: {
+      "@type": "PropertyValue",
+      propertyID: "ORCID",
+      value: `https://orcid.org/${site.orcid}`,
+    },
+  },
   publisher: { "@type": "Organization", name: "Zenodo" },
   sourceOrganization: { "@type": "CollegeOrUniversity", name: thesis.institution },
   contributor: { "@type": "Person", name: thesis.supervisor },

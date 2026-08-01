@@ -13,6 +13,11 @@ const shared = {
     github: "chriss1245",
     linkedin: "christopher-manzano-vimos",
   },
+  // Persistent researcher identifier. This is the thing that lets a machine
+  // decide the author of the thesis, the person on this site and the name on a
+  // conference page are one entity rather than three matching strings — so it
+  // goes into every Person JSON-LD we emit.
+  orcid: "0009-0000-4270-4610",
   // Path (in /public) to a downloadable CV PDF; leave "" to hide the button.
   cvPdf: "/christopher-manzano-vimos-cv.pdf",
   domain: "manapple.dev",

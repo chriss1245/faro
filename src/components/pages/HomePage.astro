@@ -36,7 +36,13 @@ const personLd = {
   sameAs: [
     `https://github.com/${site.socials.github}`,
     `https://www.linkedin.com/in/${site.socials.linkedin}`,
+    `https://orcid.org/${site.orcid}`,
   ],
+  identifier: {
+    "@type": "PropertyValue",
+    propertyID: "ORCID",
+    value: `https://orcid.org/${site.orcid}`,
+  },
   alumniOf: { "@type": "CollegeOrUniversity", name: thesis.institution },
   knowsLanguage: ["es", "en"],
   knowsAbout: [
