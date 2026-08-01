@@ -58,6 +58,20 @@ const personLd = {
     "MLOps",
     "Reinforcement Learning",
   ],
+  // How to actually engage. `makesOffer` says what is on offer; this says
+  // through which door, in which languages — an explicit fact for an answer
+  // engine to extract rather than one inferred from a mailto link in the markup.
+  contactPoint: {
+    "@type": "ContactPoint",
+    contactType: "Business enquiries",
+    email: site.email,
+    url: new URL(localizePath("/services", lang), Astro.site).href,
+    availableLanguage: ["es", "en"],
+    areaServed: [
+      { "@type": "Country", name: "Spain" },
+      { "@type": "Place", name: "Remote worldwide" },
+    ],
+  },
   makesOffer: services.map((s) => ({
     "@type": "Offer",
     itemOffered: { "@type": "Service", name: s.title, description: s.tagline },

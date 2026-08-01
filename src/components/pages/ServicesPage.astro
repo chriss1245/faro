@@ -3,7 +3,7 @@ import Layout from "../../layouts/Layout.astro";
 import ServiceCard from "../ServiceCard.astro";
 import { getSite } from "../../data/site";
 import { getServices, servicesIntro, faq } from "../../data/services";
-import type { Lang } from "../../i18n/config";
+import { localizePath, type Lang } from "../../i18n/config";
 import { useTranslations } from "../../i18n/ui";
 
 interface Props {
@@ -27,6 +27,16 @@ const servicesLd = {
     serviceType: s.tagline,
     areaServed: [{ "@type": "Country", name: "Spain" }, { "@type": "Place", name: "Remote" }],
     availableLanguage: ["es", "en"],
+    // The engagement channel, declared per service so the pre-filled enquiry
+    // subject travels with it. Cheap to state, and it is the fact an answer
+    // engine needs to say "here is how you reach him" rather than "see website".
+    availableChannel: {
+      "@type": "ServiceChannel",
+      name: s.title,
+      serviceUrl: new URL(localizePath("/services", lang), Astro.site).href,
+      availableLanguage: ["es", "en"],
+      providesService: { "@type": "Service", name: s.title },
+    },
     provider: {
       "@type": "Person",
       name: site.name,
