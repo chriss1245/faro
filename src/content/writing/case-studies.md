@@ -1,158 +1,163 @@
 ---
-title: "Four systems, and what they'd cost you to get wrong"
-description: "Case studies from production: a multi-agent investment analyst, an auction valuation engine, a course generator, and the platform all three run on."
+title: "What I've shipped for clients"
+description: "Six production AI engagements across energy, insurance, medical imaging, SaaS, legal tech and search — the constraint that made each one hard, and what it took to ship."
 date: 2026-07-31
 draft: false
 ---
 
-A portfolio that lists technologies tells you what someone has touched. It
-doesn't tell you what they'd do on day one of your problem. So this is written
-the other way round: four systems I designed, built and operate, each framed as
-the brief it answered, the constraint that made it hard, and the decision I'd
-defend in a review.
+A list of technologies tells you what someone has touched. It doesn't tell you
+what they'd do on day one of your problem.
 
-One thing up front, because I'd rather you hear it from me than wonder. These are
-my own products, not client engagements under NDA — I built them, I pay for the
-box they run on, and I'm the one woken up when they break. I think that makes
-them *better* evidence, not worse: nothing here is a slide about work I helped
-with. Every decision below is one I made and then had to live with.
+So this is written the other way round. Six engagements from nearly four years of
+consulting, each framed as the constraint that made it hard rather than the stack
+it was built on — because the stack is rarely the interesting part. Every one of
+these went to production for an enterprise client.
 
----
-
-## Warren — when the honest answer is "no signal"
-
-**The brief.** Turn market data into an investment thesis a human can act on: a
-direction, an entry price, a take-profit, a stop-loss.
-
-**The constraint.** This is the category of problem where language models are most
-seductive and most dangerous. Ask one to value a company and it will produce
-something fluent, specific and unfalsifiable. Fluency is not analysis.
-
-**What I built.** A LangGraph multi-agent system with a hard architectural rule:
-**the numbers are computed before any model is invoked.** Specialised agents own
-data collection, quantitative screening, fundamentals, macro context and intrinsic
-valuation. Those layers are deterministic. Only then do the LLMs get involved, and
-their job is narrowly defined — synthesise the computed evidence into a thesis.
-They summarise; they don't estimate.
-
-**The decision I'd defend.** A Guardian loop that can decline. Before Warren emits
-entry and exit levels, it asks whether a credible thesis actually exists — and if
-not, it says nothing for that ticker. Building a system that returns fewer answers
-is an unnatural act; every instinct in product design pushes the other way. But a
-recommendation engine that always recommends is a random number generator with
-good manners, and the first time a user notices that, you've lost them for good.
-
-**Transferable to you if:** you're putting a model anywhere near a decision with
-money or liability attached, and you need to be able to explain — to a regulator,
-a board, or a customer — where a specific number came from.
+The clients are unnamed here and the details are deliberately at the level of the
+problem rather than their implementation. What the systems had to survive is mine
+to talk about; how their business works is not.
 
 ---
 
-## Gollum — the metric nobody was measuring
+## A multinational utility — forecasting renewable output at scale
 
-**The brief.** It started narrow and personal: buy a particular piece of jewellery
-at auction without overpaying.
+**The problem.** Predict generation for **200+ renewable plants** across the US,
+Spain and the UK.
 
-**The constraint.** Every auction site sorts by price. Price is not the question.
-The question is what something is worth relative to what it's being sold for, and
-that number exists nowhere in the listing.
+**The constraint.** Volume, and the fact that weather data is a mess. The pipeline
+ingests **2 TB per day**, drawn from three separate meteorological sources —
+ECMWF, GFS and WRF — that disagree about grids, formats and update cadence. At
+that scale you don't get to hand-hold anything.
 
-**What I built.** A Playwright scraping pipeline feeding a FastAPI service that
-tracks lots and ranks them by **value for money rather than absolute price** —
-which required deriving a comparable-value estimate from messy, inconsistent
-listing data, since no auction house publishes one.
+**What I did.** Designed distributed ML pipelines on AWS, and built the ingestion
+and normalisation layer that turns three incompatible forecast sources into
+something a model can consume — engineered for reproducibility and robustness in
+production rather than for a good number in a notebook.
 
-**The decision I'd defend.** Vision analysis is on-demand, not automatic. Gollum
-can read a lot's photographs with a multimodal model to pull detail out of images
-that never made it into the text description. That is genuinely useful and it
-costs money per call, so it runs when a user asks for it on a specific lot — not
-across every listing on every crawl. Unit economics are an architecture concern.
-The cheapest time to decide what a feature costs at scale is before you've built
-it into the ingest path.
-
-**Transferable to you if:** the thing your users actually want to sort by isn't a
-field in anyone's database, and someone has to derive it from unstructured source
-data that fights back.
+**Why that matters.** Forecasting energy output is a well-understood modelling
+problem. Doing it every day, across three continents, on data that arrives late or
+malformed, without a human babysitting it, is an engineering problem. The second
+one is where projects die.
 
 ---
 
-## Newton — pedagogy as an engineering constraint
+## An insurance group — LLM claims automation under privacy constraints
 
-**The brief.** Generate structured courses from source material, with the
-retention mechanics — progress, streaks, experience points — that make people
-finish them.
+**The problem.** Automate claims processing: classify long documents and extract
+the fields that matter.
 
-**The constraint.** Generating a plausible-looking syllabus is a demo you can
-build in a weekend. Generating one with real pedagogical sequencing, where each
-module depends on the last and difficulty ramps rather than lurches, is the actual
-product.
+**The constraint.** Identity documents — DNI, NIE, passport. Two hard consequences.
+The accuracy bar is unforgiving, because a wrong identity field isn't a slightly
+worse answer, it's a broken claim. And the data legally could not leave the
+client's infrastructure, which rules out simply calling a commercial API.
 
-**What I built.** A generation pipeline that treats course structure as a
-first-class object rather than a formatting concern, paired with a progression
-system designed around completion rather than engagement-for-its-own-sake.
+**What I did.** Architected hierarchical document classification and extraction
+pipelines in LangChain and LangGraph, reaching **over 90% accuracy on identity
+field extraction**. Deployed open-source LLMs on private infrastructure to keep
+the data inside the client's perimeter. Built an **LLM-as-judge evaluation
+framework** so quality was measured continuously rather than asserted.
 
-**The decision I'd defend.** The entire MVP was built against **mock providers**
-before it was ever pointed at a real model API. Every generation step runs behind
-an interface with a fake implementation, so the full application could be built
-and verified end to end with no API key, no latency and no per-call cost. This is
-the single highest-leverage habit I have in LLM work. It makes the system testable
-in CI, it makes the model a swappable dependency instead of a load-bearing wall,
-and it means the day a better or cheaper model ships, adopting it is a
-configuration change rather than a rewrite.
-
-**Status:** feature-complete MVP, verified, not yet deployed. I'd rather show you
-something honestly labelled than inflate its status.
-
-**Transferable to you if:** you're building on a model API and you can already
-feel the vendor lock-in forming, or your test suite has quietly become dependent
-on a paid external service.
+**Why that matters.** Most LLM projects have no idea whether they're getting
+better or worse — there's a demo, then vibes. The evaluation harness is what turns
+"it seems to work" into a number you can defend in a meeting, and it's usually the
+first thing cut and the first thing missed.
 
 ---
 
-## The platform — the half of AI engineering nobody demos
+## A defence-funded medical research programme — computer vision for radiology
 
-**The brief.** Run all of the above, publicly, reliably, for one person's budget.
+**The problem.** Support radiologists reading spinal and abdominal imaging.
 
-**The constraint.** Building models is half the job. The other half is operating
-them, and it's the half that determines whether anything you built survives
-contact with real users.
+**The constraint.** Clinical decision support. The output isn't a prediction, it's
+something a doctor will act on.
 
-**What I built.** A single server running a self-hosted PaaS, with every app
-deployed by **push-to-main** — a poller notices the commit and triggers the
-deploy. No hot-patching a running container, ever; if a fix isn't in Git it
-doesn't exist. Public traffic arrives through a tunnel, so the origin has **no
-inbound ports open to the internet** and the edge terminates TLS. A single
-self-hosted identity provider gives every app SSO, self-registration and a guest
-account, so adding authentication to a new project is configuration rather than
-code. One database engine, isolated per project by a provisioning script. Mail on
-my own domain.
+**What I did.** Built computer-vision models for hernia detection, vertebral
+segmentation, and scoliosis and lordosis detection — delivered as a clinical web
+application rather than handed over as weights and a notebook.
 
-**The decision I'd defend.** Guest access as a first-class mode. Warren and Gollum
-both let a stranger see the full reasoning without creating an account. Every
-growth instinct says gate it and capture the email. But for a portfolio the goal
-is not a mailing list — it's that the person evaluating me, who has maybe ninety
-seconds and no patience, reaches the actual work. A signup wall in front of proof
-is a signup wall in front of the only thing that matters.
+**Why that matters.** "Delivered as an application" is the whole sentence. A model
+a clinician cannot use is a research artefact. Getting from one to the other is
+most of the work and almost none of the credit.
 
-**Transferable to you if:** you have models that work in a notebook and a
-deployment story that doesn't exist yet, or you're paying for a stack of SaaS
-dashboards that a single well-run box would replace.
+---
+
+## A SaaS platform — prediction that changes a decision
+
+**The problem.** Help a workspace-management platform act on its own data.
+
+**What I did.** Churn-prediction and occupancy-forecasting models feeding
+retention, pricing and capacity decisions. Separately, led the generative-AI
+workflows behind an automated content pipeline for their industry blog.
+
+**Why that matters.** A churn model that nobody acts on is a dashboard. These were
+built against specific decisions — who to intervene with, what to charge, how much
+capacity to hold — which is what makes the difference between a model that gets
+used and one that gets admired once.
+
+---
+
+## A legal-tech startup — long-document coherence in public tendering
+
+**The problem.** Assisted generation of tender documentation, from scratch, as an
+early-stage proprietary product.
+
+**The constraint.** Tender documents are long, and they must stay internally
+consistent across all of it. This is precisely where language models are weakest:
+coherence degrades with length, and context management becomes the architecture
+rather than a detail of it.
+
+**What I did.** Early-stage build of the LLM tooling, working the long-document
+coherence and context-management problem directly.
+
+---
+
+## A digital-marketing group — hierarchical NLP at ad scale
+
+**The problem.** Rank and classify search-advertising keywords at volume.
+
+**What I did.** A multi-stage hierarchical classifier built on RoBERTa,
+fine-tuning Hugging Face models on digital-marketing data.
+
+**Why that matters.** Not everything needs a generative model. A fine-tuned
+encoder was the right tool here — cheaper, faster and more predictable than
+prompting something larger. Knowing when *not* to reach for an LLM is part of the
+job.
+
+---
+
+## And on my own time
+
+The consulting work above is the bulk of it. Outside client hours I design, build
+and operate my own AI products end to end, which is where I get to make every call
+myself and live with all of it:
+
+- **[Warren](/warren)** — a LangGraph multi-agent investment analyst that runs
+  deterministic quantitative and valuation layers *before* any model is invoked,
+  and declines to emit a recommendation when no credible thesis exists.
+- **[Gollum](/gollum)** — an auction tracker that ranks lots by value for money
+  rather than price, with on-demand vision analysis so per-call costs stay bounded.
+- **The platform** — everything at manapple.dev runs on one server I own: push-to-main
+  deploys, no inbound ports, single sign-on across every app. Written up in
+  [Owning the whole stack](/writing/owning-the-stack).
+
+Those are the systems I can show you in full, source and all — useful precisely
+because the client work has to stay abstract.
 
 ---
 
 ## The pattern
 
-Read together, the same instinct shows up four times: **decide what the system
-will refuse to do.** Warren refuses to force a call. Gollum refuses to run
-expensive analysis speculatively. Newton refuses to depend on a live API to be
-testable. The platform refuses to accept a change that isn't in Git.
+Read together, the same instinct shows up: **decide what the system will refuse to
+do, and how you'll know if it's wrong.** The claims pipeline got an evaluation
+harness. Warren refuses to force a call. The forecasting pipeline was built for the
+day the weather feed arrives malformed, not the day it arrives clean.
 
-That's most of what production AI engineering is. The generous, unbounded version
-of any of these systems is easier to build and demos better. It also falls over
-the moment it meets real usage, real costs, or a real question about why it said
-what it said.
+The generous, unbounded version of any of these is easier to build and demos
+better. It also falls over the first time it meets real usage, real costs, or a
+real question about why it said what it said.
 
 If you're somewhere on that path — a prototype that works and a production story
-that doesn't, or a model in production that nobody can quite explain — that's the
-conversation I'm useful in. I'm reachable at
-[christopher.manzano@manapple.dev](mailto:christopher.manzano@manapple.dev).
+that doesn't, or a model in production nobody can quite explain or afford — that's
+the conversation I'm useful in. I'm at
+[christopher.manzano@manapple.dev](mailto:christopher.manzano@manapple.dev), or
+see [what working together looks like](/services).

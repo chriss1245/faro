@@ -44,6 +44,9 @@ const personLd = {
     value: `https://orcid.org/${site.orcid}`,
   },
   alumniOf: { "@type": "CollegeOrUniversity", name: thesis.institution },
+  // Mirrors the employment entry on the ORCID record — same person, same
+  // employer, asserted in both places.
+  worksFor: { "@type": "Organization", name: "WhiteBoxML" },
   knowsLanguage: ["es", "en"],
   knowsAbout: [
     "Machine Learning",
