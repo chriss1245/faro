@@ -12,6 +12,7 @@ const shared = {
   socials: {
     github: "chriss1245",
     linkedin: "christopher-manzano-vimos",
+    kaggle: "chris1245",
   },
   // Persistent researcher identifier. This is the thing that lets a machine
   // decide the author of the thesis, the person on this site and the name on a
