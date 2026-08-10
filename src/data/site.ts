@@ -29,8 +29,6 @@ interface SiteText {
   location: string;
   /** Meta description default and the line under the hero headline. */
   tagline: string;
-  /** Greeting line opening the hero headline. */
-  heroGreeting: string;
   /** Hero headline, split so the accented span can be underlined. */
   heroLead: string;
   heroAccent: string;
@@ -44,7 +42,6 @@ const text: Record<Lang, SiteText> = {
     location: "Madrid, Spain",
     tagline:
       "I design, build and operate production AI systems end to end — from architecture to deployment.",
-    heroGreeting: "Hello, Jaime.",
     heroLead: "I help you become part of the",
     heroAccent: "fourth industrial revolution",
     heroBody:
@@ -55,7 +52,6 @@ const text: Record<Lang, SiteText> = {
     location: "Madrid, España",
     tagline:
       "Diseño, construyo y opero sistemas de IA en producción de principio a fin — de la arquitectura al despliegue.",
-    heroGreeting: "Hola, Jaime.",
     heroLead: "Te ayudo a formar parte de la",
     heroAccent: "cuarta revolución industrial",
     heroBody:
