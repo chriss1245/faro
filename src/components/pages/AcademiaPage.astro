@@ -1,7 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import { getSite } from "../../data/site";
-import { getThesis, getAcademicProjects } from "../../data/academia";
+import { getThesis, getPublications, getAcademicProjects } from "../../data/academia";
 import { localizePath, type Lang } from "../../i18n/config";
 import { useTranslations } from "../../i18n/ui";
 
@@ -12,9 +12,45 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 const site = getSite(lang);
 const thesis = getThesis(lang);
+const publications = getPublications(lang);
 const academicProjects = getAcademicProjects(lang);
 
 const doiUrl = `https://doi.org/${thesis.doi}`;
+
+// Author block, shared by every JSON-LD node on the page.
+const personLd = {
+  "@type": "Person",
+  name: site.name,
+  url: `https://${site.domain}`,
+  sameAs: `https://orcid.org/${site.orcid}`,
+  identifier: {
+    "@type": "PropertyValue",
+    propertyID: "ORCID",
+    value: `https://orcid.org/${site.orcid}`,
+  },
+};
+
+const pageUrl = new URL(localizePath("/academia", lang), Astro.site).href;
+
+// JSON-LD for the DOI-archived research — same idea as the thesis node: give
+// Google and Scholar the DOI, author and repo so this page and the Zenodo
+// record resolve to one work. The works themselves are in English.
+const publicationsLd = publications.map((pub) => ({
+  "@context": "https://schema.org",
+  "@type": "SoftwareSourceCode",
+  name: pub.title,
+  abstract: pub.abstract.join(" "),
+  datePublished: pub.datePublished,
+  inLanguage: "en",
+  codeRepository: pub.codeUrl,
+  identifier: { "@type": "PropertyValue", propertyID: "DOI", value: pub.doi },
+  sameAs: [`https://doi.org/${pub.doi}`, pub.recordUrl],
+  url: pageUrl,
+  keywords: pub.keywords.join(", "),
+  license: pub.licenseUrl,
+  author: personLd,
+  publisher: { "@type": "Organization", name: "Zenodo" },
+}));
 
 // JSON-LD Thesis — gives Google (and Scholar) the DOI, author and institution
 // so the record on Zenodo and this page resolve to the same piece of work.
@@ -30,20 +66,10 @@ const thesisLd = {
   inLanguage: "en",
   identifier: { "@type": "PropertyValue", propertyID: "DOI", value: thesis.doi },
   sameAs: [doiUrl, thesis.recordUrl],
-  url: new URL(localizePath("/academia", lang), Astro.site).href,
+  url: pageUrl,
   keywords: thesis.keywords.join(", "),
   license: thesis.licenseUrl,
-  author: {
-    "@type": "Person",
-    name: site.name,
-    url: `https://${site.domain}`,
-    sameAs: `https://orcid.org/${site.orcid}`,
-    identifier: {
-      "@type": "PropertyValue",
-      propertyID: "ORCID",
-      value: `https://orcid.org/${site.orcid}`,
-    },
-  },
+  author: personLd,
   publisher: { "@type": "Organization", name: "Zenodo" },
   sourceOrganization: { "@type": "CollegeOrUniversity", name: thesis.institution },
   contributor: { "@type": "Person", name: thesis.supervisor },
@@ -60,6 +86,11 @@ const citationYear = new Date(thesis.datePublished).getFullYear();
   image="/og/academia.png"
 >
   <script type="application/ld+json" slot="head" set:html={JSON.stringify(thesisLd)} />
+  {
+    publicationsLd.map((ld) => (
+      <script type="application/ld+json" slot="head" set:html={JSON.stringify(ld)} />
+    ))
+  }
 
   <div class="mx-auto max-w-3xl px-6 pt-20 pb-20">
     <!-- Intro -->
@@ -217,6 +248,121 @@ const citationYear = new Date(thesis.datePublished).getFullYear();
           >
         </p>
       </article>
+    </section>
+
+    <!-- Independent research -->
+    <section class="mt-16" aria-labelledby="research-title">
+      <h2 id="research-title" class="eyebrow eyebrow-rule mb-6">
+        {t("academia.researchEyebrow")}
+      </h2>
+
+      <div class="space-y-4">
+        {
+          publications.map((pub) => {
+            const pubDoiUrl = `https://doi.org/${pub.doi}`;
+            const pubYear = new Date(pub.datePublished).getFullYear();
+            return (
+              <article class="rounded-lg border border-line bg-ink-850 p-6 sm:p-8">
+                <div class="flex flex-wrap items-center gap-2.5">
+                  <span class="rounded-sm border border-aqua/45 px-2 py-0.5 text-[0.7rem] font-semibold uppercase tracking-wider text-aqua">
+                    {pub.kind}
+                  </span>
+                  <span class="numeric text-xs text-fog-400">
+                    <time datetime={pub.datePublished}>{pub.published}</time>
+                  </span>
+                </div>
+
+                {/* Title stays in its original language. */}
+                <h3
+                  lang="en"
+                  class="mt-4 text-xl font-semibold leading-snug text-fog-100 sm:text-2xl"
+                >
+                  {pub.title}
+                </h3>
+
+                <dl class="mt-5 space-y-1.5 text-sm">
+                  <div class="flex flex-wrap gap-x-2">
+                    <dt class="text-fog-400">{t("academia.affiliation")}</dt>
+                    <dd class="text-fog-200">{pub.affiliation}</dd>
+                  </div>
+                  <div class="flex flex-wrap gap-x-2">
+                    <dt class="text-fog-400">{t("academia.doi")}</dt>
+                    <dd>
+                      <a
+                        href={pubDoiUrl}
+                        class="link-underline numeric text-beacon"
+                        target="_blank"
+                        rel="noopener"
+                      >
+                        {pub.doi}
+                      </a>
+                    </dd>
+                  </div>
+                </dl>
+
+                <div class="mt-7 flex flex-wrap items-center gap-3">
+                  <a
+                    href={pub.recordUrl}
+                    target="_blank"
+                    rel="noopener"
+                    class="rounded-md bg-beacon px-5 py-2.5 text-sm font-semibold text-on-beacon transition-colors hover:bg-beacon-600"
+                  >
+                    {t("academia.record")}
+                  </a>
+                  <a
+                    href={pub.codeUrl}
+                    target="_blank"
+                    rel="noopener"
+                    class="rounded-md border border-line bg-ink-800 px-5 py-2.5 text-sm font-medium text-fog-100 transition-colors hover:border-beacon/50 hover:text-beacon"
+                  >
+                    {t("academia.code")}
+                  </a>
+                </div>
+
+                <div class="mt-8 space-y-4 leading-relaxed text-fog-300">
+                  {pub.abstract.map((p) => (
+                    <p>{p}</p>
+                  ))}
+                </div>
+
+                <h4 class="eyebrow eyebrow-rule mt-9 mb-4">{t("academia.keyResults")}</h4>
+                <ul class="space-y-3">
+                  {pub.findings.map((f) => (
+                    <li class="flex gap-3 text-sm leading-relaxed text-fog-300">
+                      <span
+                        class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-beacon"
+                        aria-hidden="true"
+                      />
+                      <span>{f}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <div class="mt-8 flex flex-wrap gap-1.5">
+                  {pub.keywords.map((k) => (
+                    <span class="rounded-md bg-ink-800 px-2 py-0.5 text-[0.7rem] text-fog-300">
+                      {k}
+                    </span>
+                  ))}
+                </div>
+                <p class="mt-5 border-t border-line/60 pt-5 text-xs text-fog-400">
+                  {t("academia.licensedUnder")}
+                  <a
+                    href={pub.licenseUrl}
+                    target="_blank"
+                    rel="noopener license"
+                    class="link-underline text-fog-300">{pub.licenseLabel}</a
+                  >. {t("academia.citeAs")}: {site.name}. ({pubYear}).
+                  <em lang="en">{pub.title}</em>. Zenodo.
+                  <a href={pubDoiUrl} target="_blank" rel="noopener" class="link-underline text-fog-300"
+                    >{pubDoiUrl}</a
+                  >
+                </p>
+              </article>
+            );
+          })
+        }
+      </div>
     </section>
 
     <!-- Case studies -->

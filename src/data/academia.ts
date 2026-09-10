@@ -131,6 +131,112 @@ const thesisText: Record<Lang, ThesisText> = {
 export const getThesis = (lang: Lang) => ({ ...thesisShared, ...thesisText[lang] });
 export type Thesis = ReturnType<typeof getThesis>;
 
+// ── Independent research ─────────────────────────────────────────────────────
+// DOI-archived work that isn't the thesis: computational results and the
+// software behind them. Same rule as everything else on this page — published,
+// citable, reproducible. Newest first. Use getPublications(lang).
+
+interface PublicationText {
+  /** Work-type badge, e.g. "Computational result". */
+  kind: string;
+  /** Lead-in sentence used on cards and in meta descriptions. */
+  summary: string;
+  /** Body paragraphs for the detail block. */
+  abstract: string[];
+  /** "What's in it" bullets — what the work establishes. */
+  findings: string[];
+  keywords: string[];
+  licenseLabel: string;
+}
+
+interface PublicationDef {
+  /** Kept in its original language regardless of page locale. */
+  title: string;
+  /** Human-readable publication date. */
+  published: string;
+  /** ISO date, for JSON-LD and <time>. */
+  datePublished: string;
+  /** Author affiliation on the record. */
+  affiliation: string;
+  /** Bare DOI, no URL prefix. */
+  doi: string;
+  /** Zenodo landing page. */
+  recordUrl: string;
+  /** Public source code. */
+  codeUrl: string;
+  licenseUrl: string;
+  text: Record<Lang, PublicationText>;
+}
+
+// Newest first.
+const publicationDefs: PublicationDef[] = [
+  {
+    title:
+      "Erdős–Gyárfás conjecture: calibrated SAT-modulo-symmetries verification for cubic graphs on at most 40 vertices",
+    published: "August 2026",
+    datePublished: "2026-08-26",
+    affiliation: "WhiteBox ML",
+    doi: "10.5281/zenodo.22112532",
+    recordUrl: "https://zenodo.org/records/22112532",
+    codeUrl: "https://github.com/chriss1245/erdos-gyarfas-cubic-frontier",
+    licenseUrl: "https://opensource.org/license/mit",
+    text: {
+      en: {
+        kind: "Computational result",
+        summary:
+          "A machine-checked search establishing that any cubic counterexample to the Erdős–Gyárfás conjecture must have at least 42 vertices.",
+        abstract: [
+          "The Erdős–Gyárfás conjecture (1995) asks whether every graph of minimum degree three contains a cycle whose length is a power of two. This work settles the question exhaustively for small cubic graphs: every connected cubic graph on at most 40 vertices contains a cycle of length 4, 8 or 16, so a smallest cubic counterexample — if one exists at all — has at least 42 vertices.",
+          "The search runs SAT modulo symmetries with a Glasgow subgraph-solver propagator, which rules out isomorphic duplicates without enumerating them. The headline order is calibrated against thirteen exhaustive reference censuses — nine of them nonzero, up to 52,781 C16-free cubic graphs at order 22 — cross-checked at set level against an independent enumeration, re-decided with a totalizer encoding, and bracketed by positive controls at and beyond the frontier. The repository archives the code, data and logs, including the July 2026 independent enumeration apparatus (348.7 core-hours) used as ground truth.",
+        ],
+        findings: [
+          "Every connected cubic graph on 40 or fewer vertices has a cycle of length 4, 8 or 16 — verified exhaustively.",
+          "Any cubic counterexample to Erdős–Gyárfás (Erdős problem 64) therefore has at least 42 vertices.",
+          "The SAT-modulo-symmetries pipeline agrees with thirteen independent censuses and a separate enumeration, with a totalizer re-decision of the headline order.",
+          "Reproducible end to end: code, data and logs are archived on Zenodo under the MIT licence.",
+        ],
+        keywords: [
+          "Erdős–Gyárfás conjecture",
+          "Cubic graphs",
+          "Power-of-two cycles",
+          "SAT modulo symmetries",
+          "Graph enumeration",
+          "Erdős problem 64",
+        ],
+        licenseLabel: "MIT",
+      },
+      es: {
+        kind: "Resultado computacional",
+        summary:
+          "Una búsqueda verificada por ordenador que establece que cualquier contraejemplo cúbico a la conjetura de Erdős–Gyárfás debe tener al menos 42 vértices.",
+        abstract: [
+          "La conjetura de Erdős–Gyárfás (1995) pregunta si todo grafo de grado mínimo tres contiene un ciclo cuya longitud es una potencia de dos. Este trabajo resuelve la pregunta de forma exhaustiva para los grafos cúbicos pequeños: todo grafo cúbico conexo de a lo sumo 40 vértices contiene un ciclo de longitud 4, 8 o 16, de modo que el menor contraejemplo cúbico —si es que existe— tiene al menos 42 vértices.",
+          "La búsqueda ejecuta SAT módulo simetrías con un propagador basado en el Glasgow subgraph-solver, que descarta los duplicados isomorfos sin enumerarlos. El orden principal se calibra frente a trece censos de referencia exhaustivos —nueve de ellos no nulos, hasta 52 781 grafos cúbicos sin C16 en el orden 22—, se contrasta a nivel de conjunto con una enumeración independiente, se vuelve a decidir con una codificación totalizadora y se acota con controles positivos en la frontera y más allá. El repositorio archiva el código, los datos y los registros, incluido el aparato de enumeración independiente de julio de 2026 (348,7 horas de núcleo) usado como referencia.",
+        ],
+        findings: [
+          "Todo grafo cúbico conexo de 40 vértices o menos tiene un ciclo de longitud 4, 8 o 16, verificado de forma exhaustiva.",
+          "Por tanto, cualquier contraejemplo cúbico a Erdős–Gyárfás (problema 64 de Erdős) tiene al menos 42 vértices.",
+          "La tubería SAT módulo simetrías coincide con trece censos independientes y con una enumeración aparte, con una redecisión totalizadora del orden principal.",
+          "Reproducible de principio a fin: el código, los datos y los registros están archivados en Zenodo bajo licencia MIT.",
+        ],
+        keywords: [
+          "Conjetura de Erdős–Gyárfás",
+          "Grafos cúbicos",
+          "Ciclos potencia de dos",
+          "SAT módulo simetrías",
+          "Enumeración de grafos",
+          "Problema 64 de Erdős",
+        ],
+        licenseLabel: "MIT",
+      },
+    },
+  },
+];
+
+export const getPublications = (lang: Lang) =>
+  publicationDefs.map(({ text, ...rest }) => ({ ...rest, ...text[lang] }));
+export type Publication = ReturnType<typeof getPublications>[number];
+
 interface AcademicProjectText {
   title: string;
   /** Short course/context line. */
