@@ -29,6 +29,12 @@ const en = {
   "home.academia.eyebrow": "academia",
   "home.academia.title": "Research",
   "home.academia.cta": "View academic work",
+  "home.trust": "No sales call, no deck — just a message.",
+  "home.stack.eyebrow": "In production on",
+  "home.stats.experience": "years, client delivery",
+  "home.stats.systems": "live, self-hosted systems",
+  "home.stats.thesis": "thesis, published",
+  "home.stats.languages": "working languages",
 
   // Focus chips
   "focus.llm": "LLM-powered analysis",
@@ -156,6 +162,12 @@ const es: UIDict = {
   "home.academia.eyebrow": "academia",
   "home.academia.title": "Investigación",
   "home.academia.cta": "Ver el trabajo académico",
+  "home.trust": "Sin llamada de ventas, sin slides — solo un mensaje.",
+  "home.stack.eyebrow": "En producción con",
+  "home.stats.experience": "años entregando para clientes",
+  "home.stats.systems": "sistemas en producción, autoalojados",
+  "home.stats.thesis": "tesis, publicada",
+  "home.stats.languages": "idiomas de trabajo",
 
   // Chips de enfoque
   "focus.llm": "Análisis con LLMs",

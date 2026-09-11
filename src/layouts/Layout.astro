@@ -80,8 +80,8 @@ const alternates = singleLocale
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#fbfaf8" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#1a1917" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f8f6fb" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#08080c" media="(prefers-color-scheme: dark)" />
     <meta name="generator" content={Astro.generator} />
 
     <!-- The two faces every page paints with. Self-hosted, so preloading them
@@ -149,9 +149,11 @@ const alternates = singleLocale
     <slot name="head" />
   </head>
   <body
-    class="min-h-screen bg-ink-950 text-fog-100 antialiased selection:bg-beacon/30 selection:text-fog-100"
+    class="min-h-screen overflow-x-hidden bg-ink-950 text-fog-100 antialiased selection:bg-beacon/30 selection:text-fog-100"
   >
-    <div class="flex min-h-screen flex-col">
+    <div class="mesh" aria-hidden="true"><i class="a"></i><i class="b"></i><i class="c"></i></div>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="relative flex min-h-screen flex-col">
       <Nav lang={lang} />
       <main class="flex-1"><slot /></main>
       <Footer lang={lang} />

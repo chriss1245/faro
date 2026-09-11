@@ -23,11 +23,13 @@ const links = [
 ];
 ---
 
-<header class="sticky top-0 z-50 border-b border-line/60 bg-ink-950/70 backdrop-blur-md">
-  <nav class="mx-auto flex max-w-5xl items-center justify-between gap-4 px-6 py-4">
+<header class="sticky top-3 z-50 px-3 sm:top-4 sm:px-4">
+  <nav
+    class="glass-panel mx-auto flex max-w-4xl items-center justify-between gap-3 rounded-full px-3 py-2 shadow-[0_20px_50px_-28px_rgba(0,0,0,.55)] sm:gap-4 sm:px-4"
+  >
     <a
       href={localizePath("/", lang)}
-      class="group flex shrink-0 items-center gap-2.5"
+      class="group flex shrink-0 items-center gap-2.5 pl-1"
       aria-label={`${site.name} — ${t("nav.home")}`}
     >
       <span class="mark-rule h-6 w-[3px] shrink-0 rounded-full" aria-hidden="true"></span>
@@ -40,10 +42,10 @@ const links = [
       >
     </a>
 
-    <div class="flex min-w-0 items-center gap-3 text-sm text-fog-300 sm:gap-5">
+    <div class="flex min-w-0 items-center gap-3 text-sm text-fog-300 sm:gap-4">
       <!-- The link row scrolls sideways on narrow phones instead of wrapping
            under the logo, which kept the sticky header two rows tall. -->
-      <div class="flex min-w-0 items-center gap-3.5 overflow-x-auto sm:gap-5 [scrollbar-width:none]">
+      <div class="flex min-w-0 items-center gap-3.5 overflow-x-auto sm:gap-4 [scrollbar-width:none]">
         {
           links.map((l) => (
             <a
@@ -55,20 +57,20 @@ const links = [
           ))
         }
       </div>
+      <div class="flex shrink-0 items-center gap-2">
+        <LangSwitcher lang={lang} />
+        <ThemeToggle />
+      </div>
       {
         site.email && (
           <a
             href={`mailto:${site.email}`}
-            class="hidden shrink-0 rounded-md border border-line bg-ink-800 px-3.5 py-1.5 text-fog-100 transition-colors hover:border-beacon/50 hover:text-beacon xl:inline-block"
+            class="btn-gradient hidden shrink-0 rounded-full px-4 py-1.5 text-sm font-semibold xl:inline-block"
           >
             {t("nav.contact")}
           </a>
         )
       }
-      <div class="flex shrink-0 items-center gap-2">
-        <LangSwitcher lang={lang} />
-        <ThemeToggle />
-      </div>
     </div>
   </nav>
 </header>

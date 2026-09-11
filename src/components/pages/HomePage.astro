@@ -22,6 +22,13 @@ const services = getServices(lang);
 
 const focus = [t("focus.llm"), t("focus.quant"), t("focus.infra"), t("focus.public")];
 
+// Real tech, pulled from each project's own stack groups (src/data/projects.ts)
+// rather than hardcoded, so the strip can't drift out of sync with them.
+const stackItems = Array.from(new Set(projects.flatMap((p) => p.stack.flatMap((g) => g.items))));
+
+const liveCount = projects.filter((p) => p.status === "live").length;
+const accents = ["beacon", "flare", "aqua"] as const;
+
 // JSON-LD Person — helps Google associate this site with me and disambiguate
 // homonyms. `makesOffer` surfaces the freelance services as structured data.
 const personLd = {
@@ -84,37 +91,120 @@ const personLd = {
 
   <!-- Hero. Name first, claim second: a consultant introduces themselves
        before they pitch. -->
-  <section class="mx-auto max-w-5xl px-6 pt-16 pb-14 sm:pt-24">
-    <p class="eyebrow mb-6">{t("home.eyebrow")}</p>
-    <h1 class="max-w-4xl text-[2.1rem] leading-[1.12] text-fog-100 sm:text-[3.4rem] sm:leading-[1.08]">
+  <section class="mx-auto max-w-5xl px-6 pt-16 pb-6 text-center sm:pt-24">
+    <span
+      class="glass-panel mx-auto mb-7 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs text-fog-300"
+    >
+      <span class="h-2 w-2 shrink-0 rounded-full bg-beacon" aria-hidden="true"></span>
+      {t("home.eyebrow")}
+    </span>
+    <h1 class="mx-auto max-w-3xl text-[2.1rem] leading-[1.12] text-fog-100 sm:text-[3.4rem] sm:leading-[1.08]">
       {site.heroLead}
-      <span class="text-beacon">{site.heroAccent}</span>.
+      <span class="text-gradient">{site.heroAccent}</span>.
     </h1>
-    <p class="mt-7 max-w-2xl text-lg leading-relaxed text-fog-300">
+    <p class="mx-auto mt-7 max-w-2xl text-lg leading-relaxed text-fog-300">
       {t("home.intro")} <span class="font-medium text-fog-100">{site.name}</span>. {site.heroBody}
     </p>
 
-    <div class="mt-9 flex flex-wrap items-center gap-4">
-      <a
-        href={localizePath("/services", lang)}
-        class="rounded-md bg-beacon px-5 py-2.5 text-sm font-semibold text-on-beacon transition-colors hover:bg-beacon-600"
-      >
+    <div class="mt-9 flex flex-wrap items-center justify-center gap-4">
+      <a href={localizePath("/services", lang)} class="btn-gradient rounded-full px-6 py-3 text-sm font-semibold">
         {t("services.title")}
       </a>
       <a
         href={localizePath("/cv", lang)}
-        class="rounded-md border border-line bg-ink-800 px-5 py-2.5 text-sm font-medium text-fog-100 transition-colors hover:border-beacon/50 hover:text-beacon"
+        class="glass-panel rounded-full px-6 py-3 text-sm font-medium text-fog-100 transition-colors hover:text-beacon"
       >
         {t("home.ctaCv")}
       </a>
-      <div class="pl-1"><Socials /></div>
+    </div>
+    <p class="mt-4 text-xs text-fog-400">{t("home.trust")}</p>
+    <div class="mt-4 flex justify-center"><Socials /></div>
+  </section>
+
+  <!-- Hero visual: the two live systems, the research credential and the
+       working basics, in one glass panel — built entirely from real data
+       (getProjects / getThesis / getSite), not placeholder copy. -->
+  <section class="relative mx-auto max-w-4xl px-6 pb-16">
+    <div class="glass-panel overflow-hidden rounded-2xl shadow-[0_60px_100px_-50px_rgba(0,0,0,.5)]">
+      <div class="flex items-center gap-2 border-b border-line px-5 py-3">
+        <span class="h-2.5 w-2.5 rounded-full bg-ink-700" aria-hidden="true"></span>
+        <span class="h-2.5 w-2.5 rounded-full bg-ink-700" aria-hidden="true"></span>
+        <span class="h-2.5 w-2.5 rounded-full bg-ink-700" aria-hidden="true"></span>
+        <span class="numeric ml-auto text-xs text-fog-400">{t("home.work.eyebrow")}</span>
+      </div>
+      <div class="grid gap-4 p-5 sm:grid-cols-2">
+        {
+          projects.map((project) => (
+            <a
+              href={localizePath(`/${project.slug}`, lang)}
+              class="rounded-xl border border-line p-4 transition-colors hover:border-beacon/40"
+            >
+              <p class="flex items-center gap-2 text-sm font-semibold text-fog-100">
+                <span class="h-1.5 w-1.5 rounded-full bg-aqua" style="box-shadow:0 0 8px var(--color-aqua)" aria-hidden="true" />
+                {project.name}
+              </p>
+              <p class="mt-1.5 text-xs leading-relaxed text-fog-400">{project.tagline}</p>
+            </a>
+          ))
+        }
+        <a
+          href={localizePath("/academia", lang)}
+          class="rounded-xl border border-line p-4 transition-colors hover:border-beacon/40"
+        >
+          <p class="flex items-center gap-2 text-sm font-semibold text-fog-100">
+            <span class="h-1.5 w-1.5 rounded-full bg-flare" style="box-shadow:0 0 8px var(--color-flare)" aria-hidden="true" />
+            {t("home.academia.title")}
+          </p>
+          <p class="mt-1.5 text-xs leading-relaxed text-fog-400">{thesis.title}</p>
+        </a>
+        <div class="rounded-xl border border-line p-4">
+          <p class="flex items-center gap-2 text-sm font-semibold text-fog-100">
+            <span class="h-1.5 w-1.5 rounded-full bg-beacon" style="box-shadow:0 0 8px var(--color-beacon)" aria-hidden="true" />
+            {site.role}
+          </p>
+          <p class="mt-1.5 text-xs leading-relaxed text-fog-400">{site.location}</p>
+        </div>
+      </div>
     </div>
 
-    <!-- Focus areas as a caption line rather than a row of chips — the chips
-         were the last bit of dashboard styling left in the hero. -->
-    <p class="mt-12 border-t border-line pt-5 text-sm text-fog-400">
-      {focus.join("  ·  ")}
-    </p>
+    <!-- Real stack, pulled from the two live systems' own data — see
+         stackItems above. -->
+    <div class="mt-6 flex flex-wrap justify-center gap-2">
+      {
+        stackItems.map((item) => (
+          <span class="rounded-full border border-line bg-ink-850/60 px-3.5 py-1.5 text-xs font-medium text-fog-300">
+            {item}
+          </span>
+        ))
+      }
+    </div>
+
+    <!-- Focus areas as a caption line. -->
+    <p class="mt-8 text-center text-sm text-fog-400">{focus.join("  ·  ")}</p>
+  </section>
+
+  <!-- Stats — every figure here is real: derived from cv.ts ("nearly four
+       years" of client delivery), the project data (live, self-hosted
+       systems) and the academia data (the one published thesis). -->
+  <section class="mx-auto max-w-5xl px-6 pb-4">
+    <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <div class="card rounded-xl px-4 py-5 text-center">
+        <p class="numeric text-2xl font-semibold text-fog-100">~4</p>
+        <p class="mt-1 text-xs text-fog-400">{t("home.stats.experience")}</p>
+      </div>
+      <div class="card rounded-xl px-4 py-5 text-center">
+        <p class="numeric text-2xl font-semibold text-fog-100">{liveCount}</p>
+        <p class="mt-1 text-xs text-fog-400">{t("home.stats.systems")}</p>
+      </div>
+      <div class="card rounded-xl px-4 py-5 text-center">
+        <p class="numeric text-2xl font-semibold text-fog-100">1</p>
+        <p class="mt-1 text-xs text-fog-400">{t("home.stats.thesis")}</p>
+      </div>
+      <div class="card rounded-xl px-4 py-5 text-center">
+        <p class="numeric text-2xl font-semibold text-fog-100">ES / EN</p>
+        <p class="mt-1 text-xs text-fog-400">{t("home.stats.languages")}</p>
+      </div>
+    </div>
   </section>
 
   <!-- Services. Moved above the project grid: the offering is what a visitor
@@ -126,10 +216,17 @@ const personLd = {
       <p class="mt-4 max-w-2xl leading-relaxed text-fog-300">{servicesIntro[lang].lead}</p>
     </div>
 
-    <div class="grid gap-5 sm:grid-cols-3">
+    <div class="bento">
       {
-        services.map((service) => (
-          <ServiceCard service={service} lang={lang} email={site.email} compact />
+        services.map((service, i) => (
+          <ServiceCard
+            service={service}
+            lang={lang}
+            email={site.email}
+            compact
+            size={i === 0 ? "lg" : "md"}
+            accent={accents[i % accents.length]}
+          />
         ))
       }
     </div>
@@ -199,18 +296,20 @@ const personLd = {
   <!-- Contact. The offering lives above; this closes the page with the ask. -->
   <section id="contact" class="mx-auto max-w-5xl scroll-mt-24 px-6 pt-4 pb-24">
     <div
-      class="flex flex-col items-start justify-between gap-6 rounded-lg border border-line bg-ink-900 p-8 sm:flex-row sm:items-center sm:p-10"
+      class="relative flex flex-col items-start justify-between gap-6 overflow-hidden rounded-2xl border border-line bg-ink-900 p-8 sm:flex-row sm:items-center sm:p-10"
     >
-      <div>
+      <div
+        class="pointer-events-none absolute -top-32 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-beacon opacity-20 blur-3xl"
+        aria-hidden="true"
+      >
+      </div>
+      <div class="relative">
         <h3 class="text-2xl text-fog-100 sm:text-3xl">{t("contact.title")}</h3>
         <p class="mt-2 text-fog-300">{t("contact.body")}</p>
       </div>
       {
         site.email && (
-          <a
-            href={`mailto:${site.email}`}
-            class="shrink-0 rounded-md bg-beacon px-5 py-2.5 text-sm font-semibold text-on-beacon transition-colors hover:bg-beacon-600"
-          >
+          <a href={`mailto:${site.email}`} class="btn-gradient relative shrink-0 rounded-full px-6 py-3 text-sm font-semibold">
             {t("contact.cta")}
           </a>
         )

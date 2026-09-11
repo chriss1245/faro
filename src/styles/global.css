@@ -3,9 +3,10 @@
 @plugin "@tailwindcss/typography";
 
 /* ---- faro design tokens ----------------------------------------------------
-   Editorial direction: warm paper, white cards, ink-blue accent, serif
-   headlines. The register to aim for is an independent consultant's site — not
-   a terminal, not a SaaS landing page.
+   Product-landing direction: dark base, violet/pink/cyan gradient accents,
+   glass panels, glow-bordered cards, gradient-mesh backdrop. Light theme is
+   the same system turned down — cream-lavender page, deep-saturated accents
+   for text/links, pastel mesh — not a plain inverse.
 
    The tokens are SEMANTIC, not literal, so a single set of utilities serves
    both themes. Read them as roles, never as absolute lightness:
@@ -17,40 +18,46 @@
      fog-100 → primary text   fog-300 → body text     fog-500 → faintest
      fog-200 → strong text    fog-400 → muted text
 
-     beacon = primary signal accent (ink blue)
-     aqua   = secondary accent (deep teal)
+     beacon = primary signal accent (violet) — used as TEXT/LINK color and as
+              a solid button fill, so in dark mode it stays a light pastel
+              shade (dark text sits on it); in light mode it's a deep,
+              AA-safe shade (white text sits on it).
+     aqua   = secondary accent (cyan/teal) — text and outline-chip use only,
+              never a solid fill, so it can stay saturated in both themes.
+     flare  = third gradient stop (pink) — DECORATIVE ONLY: gradient text,
+              glow blobs, icon-badge fills. Never used as small solid text or
+              a text-bearing fill, so it carries no AA contrast obligation.
 
    LIGHT is the default and lives in @theme below; DARK re-points the same
    variables in the [data-theme="dark"] block. Because Tailwind v4 utilities
    compile to `var(--color-*)`, changing the variable at runtime re-themes the
    whole site — no `dark:` variants anywhere in the markup.
 
-   Contrast is verified per theme against the surface each colour actually sits
-   on (paper *and* card), not just against white. Every text token clears WCAG
-   AA 4.5:1; beacon clears it in both directions, so white-on-beacon buttons and
-   beacon-on-paper links are both safe. */
+   Contrast is verified per theme against the surface each colour actually
+   sits on. beacon and aqua clear WCAG AA 4.5:1 as text in both themes; flare
+   is exempt because it never carries small text. */
 @theme {
-  /* light surfaces — warm paper page, white cards raised on top of it */
-  --color-ink-950: #fbfaf8;
-  --color-ink-900: #f5f3ef;
+  /* light surfaces — cream-lavender page, white cards raised on top of it */
+  --color-ink-950: #f8f6fb;
+  --color-ink-900: #f3f0f8;
   --color-ink-850: #ffffff;
-  --color-ink-800: #f0ede8;
-  --color-ink-700: #e7e3db;
-  --color-line: #dedad2;
+  --color-ink-800: #efebf5;
+  --color-ink-700: #e6e0ef;
+  --color-line: #e1dbec;
 
-  /* light text — neutral ink, faintly cool so it does not read as brown */
-  --color-fog-100: #15181d;
-  --color-fog-200: #2c3138;
-  --color-fog-300: #4d545e;
-  --color-fog-400: #656c77;
-  --color-fog-500: #9aa0a9;
+  /* light text — neutral ink, faintly cool/violet so it doesn't read brown */
+  --color-fog-100: #17151f;
+  --color-fog-200: #322e3d;
+  --color-fog-300: #57536a;
+  --color-fog-400: #726d82;
+  --color-fog-500: #a19bb0;
 
-  /* light accents — ink blue as the single signal colour, deep teal as the
-     quiet second voice for metadata chips. beacon: 9.3:1 on paper, 9.7:1 both
-     against white and as white-on-beacon. */
-  --color-beacon: #1d3f8f;
-  --color-beacon-600: #16306e;
-  --color-aqua: #0f6b6b;
+  /* light accents — deep violet as the signal colour, deep teal as the quiet
+     second voice. beacon: ~7.5:1 on paper and on white-fill text. */
+  --color-beacon: #6d3fd1;
+  --color-beacon-600: #5a2eb8;
+  --color-aqua: #0c7489;
+  --color-flare: #db2777;
 
   /* text colour that sits on a solid `bg-beacon` fill */
   --color-on-beacon: #ffffff;
@@ -60,33 +67,32 @@
   --font-mono: ui-monospace, "JetBrains Mono", SFMono-Regular, Menlo, monospace;
 }
 
-/* Dark theme — the same warm paper after dusk, NOT a developer's terminal.
-   A near-black page with a bright blue accent reads as an IDE; this is a warm
-   charcoal (the light theme's paper turned down) with cards lifted slightly
-   above it, off-white text rather than pure white, and the blue desaturated so
-   it sits on the page instead of glowing off it.
+/* Dark theme — near-black base, vivid gradient accents, glass surfaces.
    `html[data-theme="dark"]` outranks the `:root` block Tailwind emits. */
 html[data-theme="dark"] {
   color-scheme: dark;
 
-  --color-ink-950: #1a1917;
-  --color-ink-900: #201f1c;
-  --color-ink-850: #24231f;
-  --color-ink-800: #2b2926;
-  --color-ink-700: #363330;
-  --color-line: #38352f;
+  --color-ink-950: #08080c;
+  --color-ink-900: #0d0d13;
+  --color-ink-850: #15151d;
+  --color-ink-800: #1b1b25;
+  --color-ink-700: #24242f;
+  --color-line: #2b2b37;
 
-  --color-fog-100: #ece9e3;
-  --color-fog-200: #cfcbc3;
-  --color-fog-300: #a8a49c;
-  --color-fog-400: #918e88;
-  --color-fog-500: #5f5c57;
+  --color-fog-100: #f2f1f6;
+  --color-fog-200: #d6d4de;
+  --color-fog-300: #a6a3b5;
+  --color-fog-400: #86839a;
+  --color-fog-500: #5f5c6e;
 
-  --color-beacon: #a8bde2;
-  --color-beacon-600: #c2d2ec;
-  --color-aqua: #9ac4bc;
+  /* beacon stays a light pastel violet in dark mode — same trick as a solid
+     fill needs (dark text on it) and as a link color (bright vs. the page). */
+  --color-beacon: #c4b5fd;
+  --color-beacon-600: #ddd4fe;
+  --color-aqua: #22d3ee;
+  --color-flare: #ec4899;
 
-  --color-on-beacon: #1a1917;
+  --color-on-beacon: #14121f;
 }
 
 html[data-theme="light"] {
@@ -100,10 +106,8 @@ html[data-theme="light"] {
   body {
     font-family: var(--font-sans);
     text-rendering: optimizeLegibility;
+    position: relative;
   }
-  /* Headlines are the whole voice of the redesign: serif, optical sizing on,
-     normal tracking. Tight negative tracking is a sans mannerism and makes a
-     serif look cramped. */
   h1, h2, h3 {
     font-family: var(--font-serif);
     font-optical-sizing: auto;
@@ -112,8 +116,138 @@ html[data-theme="light"] {
   }
 }
 
-/* Nav wordmark rule — a hairline that picks up the accent, replacing the
-   glowing terminal dot. */
+/* ---- decorative backdrop --------------------------------------------------
+   A fixed gradient mesh + grain sit behind every page, once, in Layout.astro.
+   Vivid/additive in dark mode, soft pastel in light mode — same three blobs,
+   opacity and blend mode swap per theme so light mode doesn't muddy. */
+.mesh {
+  position: fixed;
+  inset: -220px 0 auto 0;
+  height: 900px;
+  z-index: 0;
+  pointer-events: none;
+  filter: blur(70px);
+  opacity: 0.55;
+}
+html[data-theme="light"] .mesh {
+  opacity: 0.35;
+  filter: blur(90px);
+}
+.mesh i {
+  position: absolute;
+  border-radius: 50%;
+}
+.mesh .a {
+  width: 520px;
+  height: 520px;
+  background: var(--color-beacon);
+  top: 60px;
+  left: 8%;
+  opacity: 0.6;
+}
+.mesh .b {
+  width: 460px;
+  height: 460px;
+  background: var(--color-flare);
+  top: 180px;
+  right: 6%;
+  opacity: 0.4;
+}
+.mesh .c {
+  width: 400px;
+  height: 400px;
+  background: var(--color-aqua);
+  top: 420px;
+  left: 36%;
+  opacity: 0.28;
+}
+html[data-theme="dark"] .mesh {
+  mix-blend-mode: screen;
+}
+
+.grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0.045;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+html[data-theme="light"] .grain {
+  opacity: 0.025;
+}
+
+/* Frosted glass surface — the floating nav pill and hero visual. */
+.glass-panel {
+  background: color-mix(in oklab, var(--color-ink-850) 68%, transparent);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--color-line);
+}
+
+/* Gradient headline emphasis — violet → pink → cyan. Reserved for large
+   display text (hero headlines), where its own colour stops carry enough
+   contrast against the page on either theme without needing a flat fallback. */
+.text-gradient {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-beacon) 0%,
+    var(--color-flare) 55%,
+    var(--color-aqua) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* Bento grid — homepage services/work only. Content pages stay single-column;
+   forcing a grid onto long-form reading (thesis abstracts, CV entries) would
+   hurt them, not help. Collapses to one column below sm. */
+.bento {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-rows: minmax(11rem, auto);
+  gap: 1rem;
+}
+@media (max-width: 639px) {
+  .bento {
+    grid-template-columns: 1fr;
+  }
+  .bento > * {
+    grid-column: span 1 / span 1 !important;
+    grid-row: span 1 / span 1 !important;
+  }
+}
+/* Bento cell — the shared surface for every `.bento` child. Sizing (col/row
+   span) comes from ordinary Tailwind utilities on the element itself. */
+.cell {
+  border-radius: 1.1rem;
+  border: 1px solid var(--color-line);
+  background: linear-gradient(160deg, var(--color-ink-850), var(--color-ink-900));
+  padding: 1.6rem;
+  overflow: hidden;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+.cell:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in oklab, var(--color-beacon) 45%, var(--color-line));
+}
+
+/* Hero-grade CTA — reserved for the nav pill, hero and closing contact band,
+   so the gradient reads as "the big ask" rather than being sprinkled on every
+   button. `on-beacon` is legible against both gradient stops in both themes
+   (see the token block above). */
+.btn-gradient {
+  background-image: linear-gradient(135deg, var(--color-beacon), var(--color-flare));
+  color: var(--color-on-beacon);
+  box-shadow: 0 14px 30px -12px color-mix(in oklab, var(--color-beacon) 55%, transparent);
+  transition: filter 0.2s ease, transform 0.2s ease;
+}
+.btn-gradient:hover {
+  filter: brightness(1.07);
+}
+
+/* Nav wordmark rule — a hairline that picks up the accent. */
 .mark-rule {
   background: linear-gradient(to bottom, var(--color-beacon), color-mix(in oklab, var(--color-beacon) 25%, transparent));
 }
@@ -131,8 +265,7 @@ html[data-theme="dark"] .theme-icon-moon {
 
 /* Long-form article text. Replaces `prose-invert` (which hard-codes a dark
    scheme) by mapping typography's variables onto the semantic tokens, so
-   articles follow the active theme for free. Body copy in the serif, because
-   these are essays and they should read like essays. */
+   articles follow the active theme for free. */
 .prose-site {
   --tw-prose-body: var(--color-fog-200);
   --tw-prose-headings: var(--color-fog-100);
@@ -162,8 +295,7 @@ html[data-theme="dark"] .theme-icon-moon {
   font-style: normal;
 }
 
-/* Section eyebrow. Was a monospace `// comment` marker; now a quiet spaced
-   small-cap label in the sans, the way a report labels its sections. */
+/* Section eyebrow — quiet spaced small-caps label. */
 .eyebrow {
   font-family: var(--font-sans);
   font-size: 0.7rem;
@@ -172,7 +304,6 @@ html[data-theme="dark"] .theme-icon-moon {
   text-transform: uppercase;
   color: var(--color-fog-400);
 }
-/* A short rule to the left of a section label — the editorial tell. */
 .eyebrow-rule {
   display: flex;
   align-items: center;
@@ -186,20 +317,25 @@ html[data-theme="dark"] .theme-icon-moon {
   flex: none;
 }
 
-/* Cards sit still. The old lift-on-hover was the main thing making the page
-   feel like a toy; the border warming to the accent is enough affordance. */
+/* Cards: glass surface, glow border on hover/lift instead of a flat lift. */
 .card {
   border: 1px solid var(--color-line);
   background: var(--color-ink-850);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+.card-hover {
+  border: 1px solid var(--color-line);
+  background: var(--color-ink-850);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 .card-hover:hover {
-  border-color: color-mix(in oklab, var(--color-beacon) 40%, var(--color-line));
+  transform: translateY(-2px);
+  border-color: color-mix(in oklab, var(--color-beacon) 45%, var(--color-line));
   box-shadow: 0 1px 2px color-mix(in oklab, var(--color-fog-100) 6%, transparent),
     0 8px 24px -12px color-mix(in oklab, var(--color-fog-100) 18%, transparent);
 }
 html[data-theme="dark"] .card-hover:hover {
-  box-shadow: none;
+  box-shadow: 0 20px 40px -20px color-mix(in oklab, var(--color-beacon) 55%, transparent);
 }
 
 .link-underline {
