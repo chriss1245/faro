@@ -15,6 +15,7 @@ const en = {
   "nav.writing": "Blog",
   "nav.cv": "CV",
   "nav.contact": "Get in touch",
+  "nav.menu": "Menu",
   "nav.home": "home",
   "nav.switchLang": "Ver en español",
 
@@ -148,6 +149,7 @@ const es: UIDict = {
   "nav.writing": "Blog",
   "nav.cv": "CV",
   "nav.contact": "Hablemos",
+  "nav.menu": "Menú",
   "nav.home": "inicio",
   "nav.switchLang": "View in English",
 

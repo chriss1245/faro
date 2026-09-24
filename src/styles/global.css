@@ -185,6 +185,45 @@ html[data-theme="light"] .grain {
   border: 1px solid var(--color-line);
 }
 
+/* Phone menu (popover under the floating nav pill). The popover's UA styles
+   centre it as a dialog; pin it just below the header instead, and fade/slide
+   it in with @starting-style where supported. */
+.mobile-nav {
+  inset: calc(env(safe-area-inset-top) + 4.25rem) 0.75rem auto 0.75rem;
+  width: auto;
+  margin: 0;
+  padding: 0.5rem;
+  border-radius: 1.75rem;
+  color: inherit;
+  background: color-mix(in oklab, var(--color-ink-850) 92%, transparent);
+  box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  transform: translateY(-6px);
+  transition:
+    opacity 0.16s ease,
+    transform 0.16s ease,
+    overlay 0.16s allow-discrete,
+    display 0.16s allow-discrete;
+}
+.mobile-nav:popover-open {
+  opacity: 1;
+  transform: none;
+}
+@starting-style {
+  .mobile-nav:popover-open {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+.mobile-nav::backdrop {
+  background: rgb(0 0 0 / 0.25);
+}
+@media (prefers-reduced-motion: reduce) {
+  .mobile-nav {
+    transition: none;
+  }
+}
+
 /* Gradient headline emphasis — violet → pink → cyan. Reserved for large
    display text (hero headlines), where its own colour stops carry enough
    contrast against the page on either theme without needing a flat fallback. */
