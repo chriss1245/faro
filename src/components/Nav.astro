@@ -4,6 +4,7 @@ import { localizePath, type Lang } from "../i18n/config";
 import { useTranslations } from "../i18n/ui";
 import ThemeToggle from "./ThemeToggle.astro";
 import LangSwitcher from "./LangSwitcher.astro";
+import Logo from "./Logo.astro";
 
 interface Props {
   lang: Lang;
@@ -29,17 +30,14 @@ const links = [
   >
     <a
       href={localizePath("/", lang)}
-      class="group flex shrink-0 items-center gap-2.5 pl-1"
+      class="group flex shrink-0 items-center pl-1"
       aria-label={`${site.name} — ${t("nav.home")}`}
     >
-      <span class="mark-rule h-6 w-[3px] shrink-0 rounded-full" aria-hidden="true"></span>
       <!-- The full wordmark eats the whole bar on a phone and pushes the
            language and theme controls off-screen, so narrow viewports get the
-           initials instead. -->
-      <span class="font-serif text-base font-semibold text-fog-100 sm:hidden">CM</span>
-      <span class="hidden font-serif text-base font-semibold text-fog-100 sm:inline"
-        >Christopher Manzano</span
-      >
+           symbol instead. -->
+      <Logo variant="symbol" class="inline-flex h-8 sm:hidden" />
+      <Logo variant="wordmark" class="hidden h-9 sm:inline-flex" />
     </a>
 
     <div class="flex min-w-0 items-center gap-3 text-sm text-fog-300 sm:gap-4">

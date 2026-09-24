@@ -248,8 +248,22 @@ html[data-theme="light"] .grain {
 }
 
 /* Nav wordmark rule — a hairline that picks up the accent. */
-.mark-rule {
-  background: linear-gradient(to bottom, var(--color-beacon), color-mix(in oklab, var(--color-beacon) 25%, transparent));
+/* manapple logo (components/Logo.astro): map the SVG's colour slots onto the
+   site tokens so it flips with the theme toggle. */
+.logo {
+  --fg: var(--color-fog-100);
+  --v: var(--color-beacon);
+  --p: var(--color-flare);
+  --a: var(--color-aqua);
+  --bg: var(--color-ink-950);
+  /* no display here: an unlayered rule would beat Tailwind's layered
+     hidden / sm:inline-flex, so visibility stays with the utilities */
+  align-items: center;
+}
+.logo svg {
+  display: block;
+  height: 100%;
+  width: auto;
 }
 
 /* Theme toggle: show the icon for the theme the click would switch TO. */

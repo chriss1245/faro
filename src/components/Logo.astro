@@ -1,0 +1,16 @@
+---
+// The manapple logo, inlined so it follows the site's own data-theme toggle
+// (an <img> would only follow the OS scheme). The SVGs keep their colours as
+// --fg/--v/--p/--a/--bg, which .logo maps onto the site tokens in global.css.
+// Source and generator: ~/infra/brand/logo on the server.
+import wordmark from "../assets/logo/wordmark.svg?raw";
+import symbol from "../assets/logo/symbol.svg?raw";
+
+interface Props {
+  variant?: "wordmark" | "symbol";
+  class?: string;
+}
+const { variant = "wordmark", class: className } = Astro.props;
+---
+
+<span class:list={["logo", className]} set:html={variant === "symbol" ? symbol : wordmark} />
