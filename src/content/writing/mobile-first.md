@@ -1,6 +1,6 @@
 ---
 title: "Built on a laptop, used on a phone: making every manapple app mobile-first"
-description: "Most people will open these apps on a phone, and most of the apps were quietly broken there. A single audit, four apps fixed in an evening, and the handful of CSS rules that made the difference."
+description: "Most people will open these apps on a phone, and most of the apps were quietly broken there. A single audit, three apps fixed in an evening, and the handful of CSS rules that made the difference."
 date: 2026-09-25
 draft: false
 ---
@@ -110,10 +110,8 @@ the menu when you tap an in-page link like *Work*.
 
 ## The rules I'm keeping
 
-**newton** needed only polish: code blocks in its generated summaries now scroll
-inside their panel, and quiz answers are proper 44 px buttons. The SSO login and
-the silena page already passed. That makes four apps fixed and two confirmed,
-with **26 pages** that now pass the audit at both widths. Most of the
+The SSO login and the silena page already passed. That makes three apps fixed
+and two confirmed, with **25 pages** that now pass the audit at both widths. Most of the
 work came down to a few rules, which now live in a checklist every new app has
 to pass:
 
@@ -147,5 +145,9 @@ But the sprout is thin and light, so the eye ignores it, and what you see is an
 
 The fix is *optical* centring. The symbol is now centred on the body of the *m*,
 nudged only 30% of the way toward the sprout, and the sprout rises into the top
-margin. It's a change of a few pixels that your eye notices even when you
+margin.
+
+![The leaf-m home-screen icon and phone header, before and after optical centring](./mobile-first/logo-centring.webp)
+
+It's a change of a few pixels that your eye notices even when you
 can't say why, which is true of most of this post.
