@@ -480,3 +480,30 @@ html[data-theme="dark"] .card-hover:hover {
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.01em;
 }
+
+/* Entrance motion. One keyframe, two triggers:
+   - `.rise` plays on load — for above-the-fold intros (hero, page headers).
+   - `.reveal` (or each child of `.reveal-stagger`) plays once when scrolled
+     into view; the observer in Layout.astro adds `.is-visible`.
+   `--i` staggers siblings by 80ms. It animates `translate`, not `transform`,
+   so the hover lifts on `.cell` / `.card-hover` keep working, and an
+   animation rather than a transition, so their own transitions survive.
+   Hidden states only apply under `html.js-motion` (set by an inline head
+   script): no JS means everything is simply visible. Reduced-motion
+   visitors get no motion at all. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    translate: 0 14px;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .rise,
+  .is-visible {
+    animation: rise 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-delay: calc(var(--i, 0) * 80ms);
+  }
+  html.js-motion :is(.reveal, .reveal-stagger > *):not(.is-visible) {
+    opacity: 0;
+  }
+}

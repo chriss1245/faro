@@ -43,7 +43,7 @@ const jsonLd = {
 
   <article class="mx-auto max-w-3xl px-6 pt-20 pb-20">
     <!-- Breadcrumb / back -->
-    <nav class="mb-8 text-sm text-fog-400" aria-label="Breadcrumb">
+    <nav class="rise mb-8 text-sm text-fog-400" aria-label="Breadcrumb">
       <a href={localizePath("/#work", lang)} class="link-underline hover:text-fog-100">
         {t("project.breadcrumb")}
       </a>
@@ -52,7 +52,7 @@ const jsonLd = {
     </nav>
 
     <!-- Header -->
-    <header>
+    <header style="--i:1" class="rise">
       <div class="flex flex-wrap items-center gap-3">
         <h1 class="text-4xl text-fog-100 sm:text-5xl">{project.name}</h1>
         <span
@@ -90,7 +90,7 @@ const jsonLd = {
     </header>
 
     <!-- Overview -->
-    <section class="mt-12">
+    <section class="reveal mt-12">
       <h2 class="eyebrow eyebrow-rule mb-4">{t("project.overview")}</h2>
       <div class="space-y-4 leading-relaxed text-fog-300">
         {project.overview.map((p) => <p>{p}</p>)}
@@ -98,7 +98,7 @@ const jsonLd = {
     </section>
 
     <!-- Highlights -->
-    <section class="mt-12">
+    <section class="reveal mt-12">
       <h2 class="eyebrow eyebrow-rule mb-4">{t("project.howItWorks")}</h2>
       <ul class="space-y-3">
         {
@@ -113,7 +113,7 @@ const jsonLd = {
     </section>
 
     <!-- Stack -->
-    <section class="mt-12">
+    <section class="reveal mt-12">
       <h2 class="eyebrow eyebrow-rule mb-4">{t("project.stack")}</h2>
       <div class="grid gap-5 sm:grid-cols-2">
         {

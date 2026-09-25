@@ -70,7 +70,7 @@ const faqLd = {
   <script type="application/ld+json" slot="head" set:html={JSON.stringify(faqLd)} />
 
   <div class="mx-auto max-w-5xl px-6 pt-20 pb-20">
-    <header class="max-w-2xl">
+    <header class="rise max-w-2xl">
       <p class="eyebrow eyebrow-rule mb-4">{t("services.eyebrow")}</p>
       <h1 class="text-4xl leading-tight text-fog-100 sm:text-5xl">
         {t("services.title")}
@@ -78,13 +78,13 @@ const faqLd = {
       <p class="mt-5 text-lg leading-relaxed text-fog-300">{intro.lead}</p>
     </header>
 
-    <div class="mt-14 space-y-6">
+    <div class="reveal-stagger mt-14 space-y-6">
       {services.map((service) => <ServiceCard service={service} lang={lang} email={site.email} />)}
     </div>
 
     <!-- Answers rendered as plain visible prose, not collapsed into <details>:
          the text is the point, for readers and for extraction alike. -->
-    <section class="mt-20">
+    <section class="reveal mt-20">
       <h2 class="text-2xl text-fog-100 sm:text-3xl">{t("services.faqTitle")}</h2>
       <dl class="mt-8 space-y-8">
         {

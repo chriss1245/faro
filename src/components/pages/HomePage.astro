@@ -93,20 +93,21 @@ const personLd = {
        before they pitch. -->
   <section class="mx-auto max-w-5xl px-6 pt-16 pb-6 text-center sm:pt-24">
     <span
-      class="glass-panel mx-auto mb-7 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs text-fog-300"
+      style="--i:0"
+      class="rise glass-panel mx-auto mb-7 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs text-fog-300"
     >
       <span class="h-2 w-2 shrink-0 rounded-full bg-beacon" aria-hidden="true"></span>
       {t("home.eyebrow")}
     </span>
-    <h1 class="mx-auto max-w-3xl text-[2.1rem] leading-[1.12] text-fog-100 sm:text-[3.4rem] sm:leading-[1.08]">
+    <h1 style="--i:1" class="rise mx-auto max-w-3xl text-[2.1rem] leading-[1.12] text-fog-100 sm:text-[3.4rem] sm:leading-[1.08]">
       {site.heroLead}
       <span class="text-gradient">{site.heroAccent}</span>.
     </h1>
-    <p class="mx-auto mt-7 max-w-2xl text-lg leading-relaxed text-fog-300">
+    <p style="--i:2" class="rise mx-auto mt-7 max-w-2xl text-lg leading-relaxed text-fog-300">
       {t("home.intro")} <span class="font-medium text-fog-100">{site.name}</span>. {site.heroBody}
     </p>
 
-    <div class="mt-9 flex flex-wrap items-center justify-center gap-4">
+    <div style="--i:3" class="rise mt-9 flex flex-wrap items-center justify-center gap-4">
       <a href={localizePath("/services", lang)} class="btn-gradient rounded-full px-6 py-3 text-sm font-semibold">
         {t("services.title")}
       </a>
@@ -117,14 +118,14 @@ const personLd = {
         {t("home.ctaCv")}
       </a>
     </div>
-    <p class="mt-4 text-xs text-fog-400">{t("home.trust")}</p>
-    <div class="mt-4 flex justify-center"><Socials /></div>
+    <p style="--i:4" class="rise mt-4 text-xs text-fog-400">{t("home.trust")}</p>
+    <div style="--i:5" class="rise mt-4 flex justify-center"><Socials /></div>
   </section>
 
   <!-- Hero visual: the two live systems, the research credential and the
        working basics, in one glass panel — built entirely from real data
        (getProjects / getThesis / getSite), not placeholder copy. -->
-  <section class="relative mx-auto max-w-4xl px-6 pb-16">
+  <section style="--i:6" class="rise relative mx-auto max-w-4xl px-6 pb-16">
     <div class="glass-panel overflow-hidden rounded-2xl shadow-[0_60px_100px_-50px_rgba(0,0,0,.5)]">
       <div class="flex items-center gap-2 border-b border-line px-5 py-3">
         <span class="h-2.5 w-2.5 rounded-full bg-ink-700" aria-hidden="true"></span>
@@ -187,7 +188,7 @@ const personLd = {
        years" of client delivery), the project data (live, self-hosted
        systems) and the academia data (the one published thesis). -->
   <section class="mx-auto max-w-5xl px-6 pb-4">
-    <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+    <div class="reveal-stagger grid grid-cols-2 gap-3 sm:grid-cols-4">
       <div class="card rounded-xl px-4 py-5 text-center">
         <p class="numeric text-2xl font-semibold text-fog-100">~4</p>
         <p class="mt-1 text-xs text-fog-400">{t("home.stats.experience")}</p>
@@ -210,13 +211,13 @@ const personLd = {
   <!-- Services. Moved above the project grid: the offering is what a visitor
        who can hire me needs to see first. -->
   <section id="services" class="mx-auto max-w-5xl scroll-mt-24 px-6 py-16">
-    <div class="mb-8">
+    <div class="reveal mb-8">
       <p class="eyebrow eyebrow-rule mb-3">{t("services.eyebrow")}</p>
       <h2 class="text-3xl text-fog-100 sm:text-4xl">{t("services.title")}</h2>
       <p class="mt-4 max-w-2xl leading-relaxed text-fog-300">{servicesIntro[lang].lead}</p>
     </div>
 
-    <div class="bento">
+    <div class="bento reveal-stagger">
       {
         services.map((service, i) => (
           <ServiceCard
@@ -234,14 +235,14 @@ const personLd = {
 
   <!-- Academia teaser — the credential behind the offering, so it follows it. -->
   <section class="mx-auto max-w-5xl px-6 py-16">
-    <div class="mb-8">
+    <div class="reveal mb-8">
       <p class="eyebrow eyebrow-rule mb-3">{t("home.academia.eyebrow")}</p>
       <h2 class="text-3xl text-fog-100 sm:text-4xl">{t("home.academia.title")}</h2>
     </div>
 
     <a
       href={localizePath("/academia", lang)}
-      class="card-hover group block rounded-lg border border-line bg-ink-850 p-6 sm:p-8"
+      class="reveal card-hover group block rounded-lg border border-line bg-ink-850 p-6 sm:p-8"
     >
       <div class="flex flex-wrap items-center gap-2.5">
         <span class="rounded-sm border border-aqua/45 px-2 py-0.5 text-[0.7rem] font-semibold uppercase tracking-wider text-aqua">
@@ -278,7 +279,7 @@ const personLd = {
 
   <!-- Work -->
   <section id="work" class="mx-auto max-w-5xl scroll-mt-24 px-6 py-16">
-    <div class="mb-8 flex items-end justify-between gap-4">
+    <div class="reveal mb-8 flex items-end justify-between gap-4">
       <div>
         <p class="eyebrow eyebrow-rule mb-3">{t("home.work.eyebrow")}</p>
         <h2 class="text-3xl text-fog-100 sm:text-4xl">{t("home.work.title")}</h2>
@@ -288,7 +289,7 @@ const personLd = {
       </p>
     </div>
 
-    <div class="grid gap-5 sm:grid-cols-2">
+    <div class="reveal-stagger grid gap-5 sm:grid-cols-2">
       {projects.map((project) => <ProjectCard project={project} lang={lang} />)}
     </div>
   </section>
@@ -296,7 +297,7 @@ const personLd = {
   <!-- Contact. The offering lives above; this closes the page with the ask. -->
   <section id="contact" class="mx-auto max-w-5xl scroll-mt-24 px-6 pt-4 pb-24">
     <div
-      class="relative flex flex-col items-start justify-between gap-6 overflow-hidden rounded-2xl border border-line bg-ink-900 p-8 sm:flex-row sm:items-center sm:p-10"
+      class="reveal relative flex flex-col items-start justify-between gap-6 overflow-hidden rounded-2xl border border-line bg-ink-900 p-8 sm:flex-row sm:items-center sm:p-10"
     >
       <div
         class="pointer-events-none absolute -top-32 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-beacon opacity-20 blur-3xl"

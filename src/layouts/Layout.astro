@@ -82,6 +82,11 @@ const alternates = singleLocale
         /* storage blocked — stay on the default light theme */
       }
     </script>
+    <!-- Opt in to the scroll-reveal hidden state (see "Entrance motion" in
+         global.css) only once we know JS runs, so without it nothing hides. -->
+    <script is:inline>
+      document.documentElement.classList.add("js-motion");
+    </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -164,5 +169,31 @@ const alternates = singleLocale
       <main class="flex-1"><slot /></main>
       <Footer lang={lang} />
     </div>
+    <!-- Scroll reveal: mark `.reveal` elements (and `.reveal-stagger`
+         children) visible the first time they enter the viewport. Elements
+         arriving in the same batch are staggered by their order in it, so a
+         long list doesn't accumulate delay item after item. Inline so it
+         runs right after the DOM it targets, with no bundle to fail to load. -->
+    <script is:inline>
+      (() => {
+        const els = document.querySelectorAll(".reveal, .reveal-stagger > *");
+        const show = (el, i = 0) => {
+          el.style.setProperty("--i", i);
+          el.classList.add("is-visible");
+        };
+        if (!("IntersectionObserver" in window)) return els.forEach((el) => show(el));
+        const io = new IntersectionObserver(
+          (entries) =>
+            entries
+              .filter((e) => e.isIntersecting)
+              .forEach((e, i) => {
+                show(e.target, i);
+                io.unobserve(e.target);
+              }),
+          { rootMargin: "0px 0px -8% 0px" },
+        );
+        els.forEach((el) => io.observe(el));
+      })();
+    </script>
   </body>
 </html>
