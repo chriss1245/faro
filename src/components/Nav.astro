@@ -30,14 +30,13 @@ const links = [
   >
     <a
       href={localizePath("/", lang)}
-      class="group flex shrink-0 items-center pl-1"
+      class="logo-link group flex shrink-0 items-center pl-1"
       aria-label={`${site.name} — ${t("nav.home")}`}
     >
-      <!-- The full wordmark eats the whole bar on a phone and pushes the
-           language and theme controls off-screen, so narrow viewports get the
-           symbol instead. -->
-      <Logo variant="symbol" class="inline-flex h-9 sm:hidden" />
-      <Logo variant="wordmark" class="hidden h-9 sm:inline-flex" />
+      <!-- The leaf-m only: the full wordmark competed with the headline.
+           Its sprout grows once per visit, and on devices that hover it
+           unfolds into the wordmark (see .logo-anim in global.css). -->
+      <Logo variant="animated" class="inline-block" />
     </a>
 
     <div class="flex min-w-0 items-center gap-3 text-sm text-fog-300 sm:gap-4">

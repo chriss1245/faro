@@ -69,6 +69,11 @@ const alternates = singleLocale
          only an explicit past choice switches it. Kept inline and is:inline
          (no bundling) so it runs ahead of the stylesheet. -->
     <script is:inline>
+      // The logo's sprout grows once per visit, not on every page.
+      try {
+        if (sessionStorage.getItem("mnp-logo")) document.documentElement.classList.add("logo-seen");
+        else sessionStorage.setItem("mnp-logo", "1");
+      } catch {}
       try {
         if (localStorage.getItem("faro-theme") === "dark") {
           document.documentElement.dataset.theme = "dark";

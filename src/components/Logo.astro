@@ -5,12 +5,27 @@
 // Source and generator: ~/infra/brand/logo on the server.
 import wordmark from "../assets/logo/wordmark.svg?raw";
 import symbol from "../assets/logo/symbol.svg?raw";
+// The leaf-m that grows its sprout and unfolds into the wordmark on hover.
+// Its width/height ratios, closed (symbol) and open (wordmark), are recorded
+// on the SVG by the generator; the wrapper animates between them.
+import animated from "../assets/logo/animated.svg?raw";
 
 interface Props {
-  variant?: "wordmark" | "symbol";
+  variant?: "wordmark" | "symbol" | "animated";
   class?: string;
 }
 const { variant = "wordmark", class: className } = Astro.props;
+const ratio = (name: string) => animated.match(new RegExp(`data-${name}="([\\d.]+)"`))?.[1];
 ---
 
-<span class:list={["logo", className]} set:html={variant === "symbol" ? symbol : wordmark} />
+{
+  variant === "animated" ? (
+    <span
+      class:list={["logo", "logo-anim", className]}
+      style={`--closed:${ratio("closed")};--open:${ratio("open")}`}
+      set:html={animated}
+    />
+  ) : (
+    <span class:list={["logo", className]} set:html={variant === "symbol" ? symbol : wordmark} />
+  )
+}
