@@ -507,3 +507,10 @@ html[data-theme="dark"] .card-hover:hover {
     opacity: 0;
   }
 }
+/* Never hide content from print/PDF output. */
+@media print {
+  html.js-motion :is(.reveal, .reveal-stagger > *) {
+    opacity: 1 !important;
+    animation: none !important;
+  }
+}

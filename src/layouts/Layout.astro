@@ -193,6 +193,10 @@ const alternates = singleLocale
           { rootMargin: "0px 0px -8% 0px" },
         );
         els.forEach((el) => io.observe(el));
+        // Failsafe: tools that render the page without scrolling (screenshot
+        // services, AI browsing agents) must not see an empty page below the
+        // fold, so anything still hidden after a while is shown.
+        setTimeout(() => els.forEach((el) => el.classList.contains("is-visible") || show(el)), 6000);
       })();
     </script>
   </body>
