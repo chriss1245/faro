@@ -43,15 +43,15 @@ const postsAreForeign = lang !== defaultLang;
       {posts.length === 0 && <p class="text-fog-400">{t("writing.empty")}</p>}
       {
         posts.map((post) => (
-          <a href={`/writing/${post.id}`} class="group flex flex-col gap-1 py-6" hreflang="en">
+          <a href={`/writing/${post.id}`} class="group flex flex-col gap-1 py-6" hreflang={post.data.lang}>
             <span class="numeric text-xs text-fog-400">{fmt(post.data.date)}</span>
             <h2
-              lang="en"
+              lang={post.data.lang}
               class="text-xl font-medium text-fog-100 transition-colors group-hover:text-beacon"
             >
               {post.data.title}
             </h2>
-            <p lang="en" class="text-sm text-fog-400">
+            <p lang={post.data.lang} class="text-sm text-fog-400">
               {post.data.description}
             </p>
           </a>

@@ -10,7 +10,7 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content } = await render(post);
 const fmt = (d: Date) =>
-  d.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+  d.toLocaleDateString(post.data.lang === "es" ? "es-ES" : "en-US", { year: "numeric", month: "short", day: "numeric" });
 
 // Structured data for AI engines and search: who wrote the post and when.
 // The author is the site's existing Person entity (home page), not a new claim.
@@ -22,7 +22,7 @@ const blogPostingLd = {
   headline: post.data.title,
   description: post.data.description,
   datePublished: post.data.date.toISOString(),
-  inLanguage: "en",
+  inLanguage: post.data.lang,
   mainEntityOfPage: postUrl,
   url: postUrl,
   author: { "@type": "Person", name: "Christopher Manzano Vimos", url: siteUrl },
@@ -41,7 +41,7 @@ const breadcrumbLd = {
 <!-- Posts exist in English only, so no hreflang set is emitted — claiming a
      Spanish counterpart that does not exist is worse than claiming none. -->
 <Layout
-  lang="en"
+  lang={post.data.lang}
   title={post.data.title}
   description={post.data.description}
   type="article"

@@ -8,6 +8,7 @@ const writing = defineCollection({
     description: z.string(),
     date: z.coerce.date(),
     draft: z.boolean().default(false),
+    lang: z.enum(["en", "es"]).default("en"),
   }),
 });
 
