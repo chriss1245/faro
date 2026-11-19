@@ -11,6 +11,31 @@ const { post } = Astro.props;
 const { Content } = await render(post);
 const fmt = (d: Date) =>
   d.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+
+// Structured data for AI engines and search: who wrote the post and when.
+// The author is the site's existing Person entity (home page), not a new claim.
+const siteUrl = "https://manapple.dev";
+const postUrl = `${siteUrl}/writing/${post.id}`;
+const blogPostingLd = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.date.toISOString(),
+  inLanguage: "en",
+  mainEntityOfPage: postUrl,
+  url: postUrl,
+  author: { "@type": "Person", name: "Christopher Manzano Vimos", url: siteUrl },
+};
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: `${siteUrl}/` },
+    { "@type": "ListItem", position: 2, name: "Blog", item: `${siteUrl}/writing` },
+    { "@type": "ListItem", position: 3, name: post.data.title, item: postUrl },
+  ],
+};
 ---
 
 <!-- Posts exist in English only, so no hreflang set is emitted — claiming a
@@ -22,12 +47,16 @@ const fmt = (d: Date) =>
   type="article"
   singleLocale
 >
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(blogPostingLd)} />
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(breadcrumbLd)} />
   <article class="mx-auto max-w-2xl px-6 pt-20 pb-20">
     <a href="/writing" class="eyebrow transition-colors hover:text-beacon"
       >← Blog</a
     >
     <header class="mt-6 mb-10">
-      <p class="numeric text-sm text-fog-400">{fmt(post.data.date)}</p>
+      <p class="numeric text-sm text-fog-400">
+        <time datetime={post.data.date.toISOString().slice(0, 10)}>{fmt(post.data.date)}</time>
+      </p>
       <h1 class="mt-2 text-4xl leading-tight text-fog-100 sm:text-5xl">
         {post.data.title}
       </h1>
