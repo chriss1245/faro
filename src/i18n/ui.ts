@@ -27,6 +27,15 @@ const en = {
   "home.work.eyebrow": "portfolio",
   "home.work.title": "Selected work",
   "home.work.note": "A small set today, growing fast. Each one is something I'm actually running.",
+  "home.alloc.title": "Rebalance or hold",
+  "home.alloc.hold": "hold",
+  "home.alloc.rebalance": "rebalance",
+  "home.alloc.confidence": "confidence",
+  "home.alloc.caption":
+    "A simulated five-asset portfolio. Weights drift with prices, and the agent rebalances only when its confidence clears the threshold. It illustrates the core idea of my thesis, not its results.",
+  "home.alloc.cta": "Read the thesis",
+  "home.alloc.aria":
+    "Animated simulation of five portfolio weights drifting over time, with occasional rebalancing events marked by dashed lines.",
   "home.academia.eyebrow": "academia",
   "home.academia.title": "Research",
   "home.academia.cta": "View academic work",
@@ -161,6 +170,15 @@ const es: UIDict = {
   "home.work.eyebrow": "portfolio",
   "home.work.title": "Proyectos destacados",
   "home.work.note": "Pocos por ahora, pero creciendo. Todos están funcionando de verdad.",
+  "home.alloc.title": "Rebalancear o mantener",
+  "home.alloc.hold": "mantener",
+  "home.alloc.rebalance": "rebalancear",
+  "home.alloc.confidence": "confianza",
+  "home.alloc.caption":
+    "Una cartera simulada de cinco activos. Los pesos se desvían con los precios y el agente solo rebalancea cuando su confianza supera el umbral. Ilustra la idea central de mi tesis, no sus resultados.",
+  "home.alloc.cta": "Leer la tesis",
+  "home.alloc.aria":
+    "Simulación animada de cinco pesos de cartera que se desvían con el tiempo, con rebalanceos ocasionales marcados con líneas discontinuas.",
   "home.academia.eyebrow": "academia",
   "home.academia.title": "Investigación",
   "home.academia.cta": "Ver el trabajo académico",

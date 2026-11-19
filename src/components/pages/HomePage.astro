@@ -3,6 +3,7 @@ import Layout from "../../layouts/Layout.astro";
 import Socials from "../Socials.astro";
 import ProjectCard from "../ProjectCard.astro";
 import ServiceCard from "../ServiceCard.astro";
+import AllocationChart from "../AllocationChart.astro";
 import { getSite } from "../../data/site";
 import { getProjects } from "../../data/projects";
 import { getThesis } from "../../data/academia";
@@ -122,51 +123,22 @@ const personLd = {
     <div style="--i:5" class="rise mt-4 flex justify-center"><Socials /></div>
   </section>
 
-  <!-- Hero visual: the two live systems, the research credential and the
-       working basics, in one glass panel — built entirely from real data
-       (getProjects / getThesis / getSite), not placeholder copy. -->
+  <!-- Hero visual: a live simulation of the thesis idea (confidence-gated
+       rebalancing). The projects and the thesis itself are linked from the
+       Work and Academia sections below. -->
   <section style="--i:6" class="rise relative mx-auto max-w-4xl px-6 pb-16">
-    <div class="glass-panel overflow-hidden rounded-2xl shadow-[0_60px_100px_-50px_rgba(0,0,0,.5)]">
-      <div class="flex items-center gap-2 border-b border-line px-5 py-3">
-        <span class="h-2.5 w-2.5 rounded-full bg-ink-700" aria-hidden="true"></span>
-        <span class="h-2.5 w-2.5 rounded-full bg-ink-700" aria-hidden="true"></span>
-        <span class="h-2.5 w-2.5 rounded-full bg-ink-700" aria-hidden="true"></span>
-        <span class="numeric ml-auto text-xs text-fog-400">{t("home.work.eyebrow")}</span>
-      </div>
-      <div class="grid gap-4 p-5 sm:grid-cols-2">
-        {
-          projects.map((project) => (
-            <a
-              href={localizePath(`/${project.slug}`, lang)}
-              class="rounded-xl border border-line p-4 transition-colors hover:border-beacon/40"
-            >
-              <p class="flex items-center gap-2 text-sm font-semibold text-fog-100">
-                <span class="h-1.5 w-1.5 rounded-full bg-aqua" style="box-shadow:0 0 8px var(--color-aqua)" aria-hidden="true" />
-                {project.name}
-              </p>
-              <p class="mt-1.5 text-xs leading-relaxed text-fog-400">{project.tagline}</p>
-            </a>
-          ))
-        }
-        <a
-          href={localizePath("/academia", lang)}
-          class="rounded-xl border border-line p-4 transition-colors hover:border-beacon/40"
-        >
-          <p class="flex items-center gap-2 text-sm font-semibold text-fog-100">
-            <span class="h-1.5 w-1.5 rounded-full bg-flare" style="box-shadow:0 0 8px var(--color-flare)" aria-hidden="true" />
-            {t("home.academia.title")}
-          </p>
-          <p class="mt-1.5 text-xs leading-relaxed text-fog-400">{thesis.title}</p>
-        </a>
-        <div class="rounded-xl border border-line p-4">
-          <p class="flex items-center gap-2 text-sm font-semibold text-fog-100">
-            <span class="h-1.5 w-1.5 rounded-full bg-beacon" style="box-shadow:0 0 8px var(--color-beacon)" aria-hidden="true" />
-            {site.role}
-          </p>
-          <p class="mt-1.5 text-xs leading-relaxed text-fog-400">{site.location}</p>
-        </div>
-      </div>
-    </div>
+    <AllocationChart
+      href={localizePath("/academia", lang)}
+      labels={{
+        title: t("home.alloc.title"),
+        hold: t("home.alloc.hold"),
+        rebalance: t("home.alloc.rebalance"),
+        confidence: t("home.alloc.confidence"),
+        caption: t("home.alloc.caption"),
+        cta: t("home.alloc.cta"),
+        ariaLabel: t("home.alloc.aria"),
+      }}
+    />
 
     <!-- Real stack, pulled from the two live systems' own data — see
          stackItems above. -->
