@@ -5,7 +5,12 @@
  * illustrates the core idea of the thesis (a confidence score that gates the
  * rebalance) without claiming to show its results — the caption says so.
  *
- * Pure SVG + ~2 KB of inline JS. Colours come from the semantic tokens, so it
+ * The decision is the subject: the main trace is the agent's confidence, which
+ * climbs as the portfolio drifts, crosses the threshold, and falls back once
+ * the agent acts. The five weights sit underneath as a thin strip, so each
+ * crossing lines up with a visible re-weighting.
+ *
+ * Pure SVG + a little inline JS. Colours come from the semantic tokens, so it
  * re-themes with the rest of the site. Static snapshot for reduced motion, and
  * the loop pauses when off-screen or when the tab is hidden.
  */
@@ -15,6 +20,8 @@ interface Props {
     hold: string;
     rebalance: string;
     confidence: string;
+    threshold: string;
+    weights: string;
     caption: string;
     cta: string;
     ariaLabel: string;
@@ -24,28 +31,51 @@ interface Props {
 const { labels, href } = Astro.props;
 ---
 
-<figure class="alloc glass-panel overflow-hidden rounded-2xl" data-hold={labels.hold} data-rebalance={labels.rebalance}>
-  <div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 px-5 pt-4 sm:px-6">
-    <p class="font-serif text-lg text-fog-100">{labels.title}</p>
-    <p class="numeric text-xs text-fog-400" aria-hidden="true">
-      <span class="alloc-state font-semibold text-fog-200">{labels.hold}</span>
-      <span class="mx-1.5 text-fog-500">/</span>
-      {labels.confidence} <span class="alloc-conf tabular-nums text-fog-200">0.00</span>
-    </p>
+<figure class="alloc overflow-hidden rounded-2xl border border-line" data-hold={labels.hold} data-rebalance={labels.rebalance}>
+  <div class="flex flex-wrap items-end justify-between gap-x-6 gap-y-2 px-5 pt-5 sm:px-7 sm:pt-6">
+    <p class="font-serif text-lg text-fog-100 sm:text-xl">{labels.title}</p>
+    <div class="flex items-baseline gap-3" aria-hidden="true">
+      <span class="alloc-state rounded-full border border-line px-2.5 py-0.5 text-xs font-medium text-fog-300">{labels.hold}</span>
+      <span class="text-xs text-fog-400">{labels.confidence}</span>
+      <span class="alloc-conf font-serif text-3xl leading-none tabular-nums text-fog-100 sm:text-4xl">0.00</span>
+    </div>
   </div>
 
-  <div class="relative mt-3">
-    <svg class="block h-44 w-full sm:h-56" viewBox="0 0 800 240" preserveAspectRatio="none" role="img" aria-label={labels.ariaLabel}>
-      <g class="alloc-scroll">
-        <g class="alloc-bands"></g>
-        <g class="alloc-marks"></g>
-      </g>
-      <line class="alloc-gate" x1="0" x2="800" y1="0" y2="0" />
+  <div class="alloc-stage relative mt-4">
+    <svg class="block h-56 w-full sm:h-72" viewBox="0 0 800 300" preserveAspectRatio="none" role="img" aria-label={labels.ariaLabel}>
+      <rect class="alloc-zone" x="0" y="0" width="800" height="0" />
     </svg>
-    <div class="alloc-meter" aria-hidden="true"><span></span></div>
+    <!-- The moving layer is its own HTML box so the scroll between steps is a
+         compositor transform, with no script or repaint on each frame. -->
+    <div class="alloc-track absolute inset-0" aria-hidden="true">
+      <svg class="block h-full w-full" viewBox="0 0 800 300" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="alloc-fill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="var(--color-beacon)" stop-opacity="0.32" />
+          <stop offset="1" stop-color="var(--color-beacon)" stop-opacity="0" />
+        </linearGradient>
+        <linearGradient id="alloc-stroke" x1="0" y1="0" x2="800" y2="0" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stop-color="var(--color-aqua)" stop-opacity="0.15" />
+          <stop offset="0.55" stop-color="var(--color-aqua)" />
+          <stop offset="1" stop-color="var(--color-beacon)" />
+        </linearGradient>
+      </defs>
+      <g class="alloc-scroll">
+        <g class="alloc-marks"></g>
+        <path class="alloc-area" fill="url(#alloc-fill)" />
+        <path class="alloc-line" stroke="url(#alloc-stroke)" />
+        <g class="alloc-bands"></g>
+      </g>
+      </svg>
+      <span class="alloc-head"></span>
+    </div>
+    <span class="alloc-gate" aria-hidden="true"></span>
+    <span class="alloc-fade" aria-hidden="true"></span>
+    <span class="alloc-tag alloc-gate-tag" aria-hidden="true">{labels.threshold} 0.75</span>
+    <span class="alloc-tag alloc-strip-tag" aria-hidden="true">{labels.weights}</span>
   </div>
 
-  <figcaption class="flex flex-col gap-2 border-t border-line px-5 py-4 text-sm sm:flex-row sm:items-center sm:justify-between sm:px-6">
+  <figcaption class="flex flex-col gap-2 border-t border-line px-5 py-4 text-sm sm:flex-row sm:items-center sm:justify-between sm:px-7">
     <span class="max-w-xl text-fog-400">{labels.caption}</span>
     <a href={href} class="shrink-0 font-medium text-beacon hover:underline">{labels.cta}</a>
   </figcaption>
@@ -56,74 +86,120 @@ const { labels, href } = Astro.props;
      and a backdrop-filter behind it would be re-blurred on each one. */
   .alloc {
     background: var(--color-ink-850);
-    backdrop-filter: none;
     contain: layout paint;
+  }
+  .alloc-line {
+    fill: none;
+    stroke-width: 2.25;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+  }
+  .alloc-zone {
+    fill: var(--color-flare);
+    opacity: 0.05;
+    transition: opacity 0.6s ease;
+  }
+  .alloc.is-acting .alloc-zone {
+    opacity: 0.16;
+    transition-duration: 0.08s;
+  }
+  .alloc-stage {
+    overflow: hidden;
+  }
+  .alloc-track {
+    will-change: transform;
+  }
+  .alloc-gate {
+    position: absolute;
+    inset-inline: 0;
+    height: 1px;
+    background: repeating-linear-gradient(to right, var(--color-flare) 0 5px, transparent 5px 11px);
+    opacity: 0.8;
+    pointer-events: none;
   }
   .alloc-bands :global(path) {
     stroke: var(--color-ink-850);
-    stroke-width: 1.5;
+    stroke-width: 1;
     vector-effect: non-scaling-stroke;
   }
   .alloc-marks :global(line) {
-    stroke: var(--color-fog-100);
+    stroke: var(--color-flare);
     stroke-width: 1;
-    stroke-dasharray: 3 4;
     vector-effect: non-scaling-stroke;
-    opacity: 0.8;
+    opacity: 0.45;
   }
-  .alloc-marks :global(circle) {
-    fill: var(--color-fog-100);
-  }
-  .alloc-gate {
-    display: none;
-  }
-  /* Confidence meter: a thin bar under the chart that fills toward the
-     threshold tick and flashes when the agent acts. */
-  .alloc-meter {
-    position: relative;
-    height: 3px;
-    background: var(--color-line);
-  }
-  .alloc-meter::after {
-    content: "";
-    position: absolute;
-    left: 75%;
-    top: -3px;
-    width: 1px;
-    height: 9px;
-    background: var(--color-fog-400);
-  }
-  .alloc-meter span {
+  /* Fades the oldest history. An overlay rather than an SVG mask, so the
+     moving layer stays a plain composited texture. */
+  .alloc-fade {
     position: absolute;
     inset: 0 auto 0 0;
-    width: 0%;
-    background: linear-gradient(90deg, var(--color-aqua), var(--color-beacon));
-    transition: width 0.12s linear;
+    width: 35%;
+    background: linear-gradient(to right, color-mix(in oklab, var(--color-ink-850) 85%, transparent), transparent);
+    pointer-events: none;
   }
-  .alloc.is-acting .alloc-meter span {
+  .alloc-tag {
+    position: absolute;
+    right: 0.75rem;
+    font-size: 0.6875rem;
+    line-height: 1;
+    color: var(--color-fog-400);
+    pointer-events: none;
+  }
+  .alloc-gate-tag {
+    color: var(--color-flare);
+  }
+  .alloc-head {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    margin: -5px 0 0 -5px;
+    border-radius: 9999px;
+    background: var(--color-beacon);
+    box-shadow:
+      0 0 0 4px color-mix(in oklab, var(--color-beacon) 22%, transparent),
+      0 0 18px 2px color-mix(in oklab, var(--color-beacon) 55%, transparent);
+    pointer-events: none;
+  }
+  .alloc.is-acting .alloc-head {
     background: var(--color-flare);
+    box-shadow:
+      0 0 0 6px color-mix(in oklab, var(--color-flare) 25%, transparent),
+      0 0 26px 4px color-mix(in oklab, var(--color-flare) 60%, transparent);
+  }
+  .alloc-state {
+    transition: color 0.2s, border-color 0.2s, background-color 0.2s;
   }
   .alloc.is-acting .alloc-state {
-    color: var(--color-beacon);
+    color: var(--color-fog-100);
+    border-color: var(--color-flare);
+    background: color-mix(in oklab, var(--color-flare) 12%, transparent);
   }
 </style>
 
 <script>
   const BANDS = [
-    ["var(--color-beacon)", 0.9],
-    ["var(--color-flare)", 0.75],
-    ["var(--color-aqua)", 0.8],
+    ["var(--color-beacon)", 0.85],
+    ["var(--color-flare)", 0.7],
+    ["var(--color-aqua)", 0.75],
     ["var(--color-beacon)", 0.4],
     ["var(--color-flare)", 0.3],
   ] as const;
   const N = BANDS.length;
   const W = 800;
-  const H = 240;
+  const H = 300;
+  // Confidence plot on top, weights strip at the bottom.
+  const PLOT_TOP = 28;
+  const PLOT_BOT = 206;
+  const STRIP_TOP = 236;
+  const STRIP_BOT = 300;
   const STEPS = 96; // visible window
-  const DX = W / (STEPS - 1);
   const STEP_MS = 160;
   const GATE = 0.75; // confidence threshold
+  const GLIDE = 6; // steps a rebalance takes
+  const PAD = 26; // keep the newest point (and its glow) inside the frame
+  const DX = (W - PAD) / STEPS; // newest point lands at W - PAD
   const NS = "http://www.w3.org/2000/svg";
+  const cy = (c: number) => PLOT_BOT - c * (PLOT_BOT - PLOT_TOP);
 
   // Small seeded PRNG so every visit starts from the same, tuned story.
   function rng(seed: number) {
@@ -143,17 +219,27 @@ const { labels, href } = Astro.props;
     const s = w.reduce((a, b) => a + b, 0);
     return w.map((x) => x / s);
   };
+  const pct = (v: number, of: number) => `${((v / of) * 100).toFixed(3)}%`;
 
   function mount(fig: HTMLElement) {
-    const svg = fig.querySelector("svg")!;
-    const scroll = svg.querySelector<SVGGElement>(".alloc-scroll")!;
-    const bandsG = svg.querySelector<SVGGElement>(".alloc-bands")!;
-    const marksG = svg.querySelector<SVGGElement>(".alloc-marks")!;
+    const svg = fig.querySelector<SVGSVGElement>(".alloc-stage > svg")!;
+    const track = fig.querySelector<HTMLElement>(".alloc-track")!;
+    const area = track.querySelector<SVGPathElement>(".alloc-area")!;
+    const line = track.querySelector<SVGPathElement>(".alloc-line")!;
+    const bandsG = track.querySelector<SVGGElement>(".alloc-bands")!;
+    const marksG = track.querySelector<SVGGElement>(".alloc-marks")!;
+    const head = fig.querySelector<HTMLElement>(".alloc-head")!;
     const stateEl = fig.querySelector<HTMLElement>(".alloc-state")!;
     const confEl = fig.querySelector<HTMLElement>(".alloc-conf")!;
-    const meter = fig.querySelector<HTMLElement>(".alloc-meter span")!;
     const holdTxt = fig.dataset.hold ?? "hold";
     const rebTxt = fig.dataset.rebalance ?? "rebalance";
+
+    // Static geometry: threshold line, the zone above it, and the two tags.
+    const gy = cy(GATE);
+    fig.querySelector<HTMLElement>(".alloc-gate")!.style.top = pct(gy, H);
+    svg.querySelector(".alloc-zone")!.setAttribute("height", String(gy));
+    fig.querySelector<HTMLElement>(".alloc-gate-tag")!.style.top = `calc(${pct(gy, H)} - 1.05rem)`;
+    fig.querySelector<HTMLElement>(".alloc-strip-tag")!.style.top = `calc(${pct(STRIP_TOP, H)} - 1.05rem)`;
 
     const paths = BANDS.map(([c, o]) => {
       const p = document.createElementNS(NS, "path");
@@ -170,55 +256,67 @@ const { labels, href } = Astro.props;
     let glide = 0; // steps left in an active rebalance
     let cooldown = 0;
     let conf = 0;
+    let fired = 0; // confidence at the moment the agent acted
     let t = 0;
-    const hist: number[][] = [];
-    const marks: { t: number; el: SVGGElement }[] = [];
+    const hist: { w: number[]; c: number }[] = [];
+    const marks: { t: number; el: SVGLineElement }[] = [];
+    let acting = 0;
 
     function step() {
       if (glide > 0) {
+        // While rebalancing, confidence winds down from where it fired.
         w = w.map((x, i) => x + (target[i] - x) / glide);
         glide--;
+        conf = fired * (glide / GLIDE);
       } else {
         w = norm(w.map((x, i) => x * Math.exp(mu[i] + sig[i] * gauss(r))));
+        const drift = 0.5 * w.reduce((a, x, i) => a + Math.abs(x - target[i]), 0);
+        conf = Math.min(1, drift / 0.12);
       }
-      const drift = 0.5 * w.reduce((a, x, i) => a + Math.abs(x - target[i]), 0);
-      conf = Math.min(1, drift / 0.12);
       if (cooldown > 0) cooldown--;
       if (glide === 0 && cooldown === 0 && conf > GATE) {
         // Act: pick a fresh target and glide to it over a few steps.
         target = norm(Array.from({ length: N }, () => 0.35 + r() * 1.3));
-        glide = 6;
+        glide = GLIDE;
+        fired = conf;
         cooldown = 12;
-        const g = document.createElementNS(NS, "g") as SVGGElement;
-        const ln = document.createElementNS(NS, "line");
-        ln.setAttribute("y1", "0");
-        ln.setAttribute("y2", String(H));
-        const dot = document.createElementNS(NS, "circle");
-        dot.setAttribute("cy", "6");
-        dot.setAttribute("r", "3.5");
-        g.append(ln, dot);
-        marksG.appendChild(g);
-        marks.push({ t, el: g });
+        const ln = document.createElementNS(NS, "line") as SVGLineElement;
+        ln.setAttribute("y1", String(PLOT_TOP - 12));
+        ln.setAttribute("y2", String(STRIP_BOT));
+        marksG.appendChild(ln);
+        marks.push({ t, el: ln });
         fig.classList.add("is-acting");
-        setTimeout(() => fig.classList.remove("is-acting"), 900);
+        clearTimeout(acting);
+        acting = window.setTimeout(() => fig.classList.remove("is-acting"), 1100);
       }
-      hist.push([...w]);
+      hist.push({ w: [...w], c: conf });
       if (hist.length > STEPS + 1) hist.shift();
       t++;
     }
 
-    function draw(frac: number) {
+    function rebuild() {
       const n = hist.length;
       const x0 = (STEPS - (n - 1)) * DX; // right-align while the window fills
+      const xs = hist.map((_, k) => (x0 + k * DX).toFixed(1));
+
+      // Confidence trace + soft area under it.
+      let d = "";
+      for (let k = 0; k < n; k++) d += `${k ? "L" : "M"}${xs[k]},${cy(hist[k].c).toFixed(1)}`;
+      line.setAttribute("d", d);
+      area.setAttribute("d", `${d}L${xs[n - 1]},${PLOT_BOT}L${xs[0]},${PLOT_BOT}Z`);
+
+      // Weights strip.
+      const sh = STRIP_BOT - STRIP_TOP;
       let lower = new Array(n).fill(0);
       for (let b = 0; b < N; b++) {
-        const upper = lower.map((v, k) => v + hist[k][b]);
-        let d = "";
-        for (let k = 0; k < n; k++) d += `${k ? "L" : "M"}${(x0 + k * DX).toFixed(1)},${(H - upper[k] * H).toFixed(1)}`;
-        for (let k = n - 1; k >= 0; k--) d += `L${(x0 + k * DX).toFixed(1)},${(H - lower[k] * H).toFixed(1)}`;
-        paths[b].setAttribute("d", d + "Z");
+        const upper = lower.map((v, k) => v + hist[k].w[b]);
+        let p = "";
+        for (let k = 0; k < n; k++) p += `${k ? "L" : "M"}${xs[k]},${(STRIP_BOT - upper[k] * sh).toFixed(1)}`;
+        for (let k = n - 1; k >= 0; k--) p += `L${xs[k]},${(STRIP_BOT - lower[k] * sh).toFixed(1)}`;
+        paths[b].setAttribute("d", p + "Z");
         lower = upper;
       }
+
       const tFirst = t - n;
       for (let i = marks.length - 1; i >= 0; i--) {
         const x = x0 + (marks[i].t - tFirst) * DX;
@@ -227,50 +325,50 @@ const { labels, href } = Astro.props;
           marks.splice(i, 1);
           continue;
         }
-        const [ln, dot] = marks[i].el.children as unknown as SVGElement[];
-        ln.setAttribute("x1", x.toFixed(1));
-        ln.setAttribute("x2", x.toFixed(1));
-        dot.setAttribute("cx", x.toFixed(1));
+        marks[i].el.setAttribute("x1", x.toFixed(1));
+        marks[i].el.setAttribute("x2", x.toFixed(1));
       }
-      scroll.setAttribute("transform", `translate(${(-frac * DX).toFixed(2)},0)`);
+
+      // Glowing head at the newest point, in HTML so it stays round.
+      head.style.left = pct(W - PAD, W);
+      head.style.top = pct(cy(hist[n - 1].c), H);
     }
+
+    // Between steps the whole track slides one step left. A Web Animations
+    // transform on an HTML box runs on the compositor, so no script runs per frame.
+    const slide = [{ transform: "translateX(0)" }, { transform: `translateX(-${((DX / W) * 100).toFixed(4)}%)` }];
+    let anim: Animation | null = null;
 
     function readout() {
       confEl.textContent = conf.toFixed(2);
       stateEl.textContent = glide > 0 ? rebTxt : holdTxt;
-      meter.style.width = `${(conf * 100).toFixed(0)}%`;
     }
 
     // Pre-roll so the first paint already shows a full, eventful window.
     for (let i = 0; i < STEPS + 1; i++) step();
-    draw(0);
+    fig.classList.remove("is-acting");
+    rebuild();
     readout();
 
     if (!matchMedia("(prefers-reduced-motion: no-preference)").matches) return;
 
     let visible = false;
-    let last = 0;
-    let acc = 0;
-    let raf = 0;
-    const loop = (now: number) => {
-      acc += Math.min(now - (last || now), 100);
-      last = now;
-      while (acc >= STEP_MS) {
-        acc -= STEP_MS;
-        step();
-        readout();
-      }
-      draw(acc / STEP_MS);
-      raf = requestAnimationFrame(loop);
+    let timer = 0;
+    const tick = () => {
+      step();
+      readout();
+      rebuild();
+      anim = track.animate(slide, { duration: STEP_MS, easing: "linear", fill: "forwards" });
     };
     const sync = () => {
       const run = visible && !document.hidden;
-      if (run && !raf) {
-        last = 0;
-        raf = requestAnimationFrame(loop);
-      } else if (!run && raf) {
-        cancelAnimationFrame(raf);
-        raf = 0;
+      if (run && !timer) {
+        tick();
+        timer = window.setInterval(tick, STEP_MS);
+      } else if (!run && timer) {
+        clearInterval(timer);
+        timer = 0;
+        anim?.pause();
       }
     };
     new IntersectionObserver(([e]) => {

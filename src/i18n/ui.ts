@@ -31,11 +31,13 @@ const en = {
   "home.alloc.hold": "hold",
   "home.alloc.rebalance": "rebalance",
   "home.alloc.confidence": "confidence",
+  "home.alloc.threshold": "threshold",
+  "home.alloc.weights": "weights",
   "home.alloc.caption":
     "A simulated five-asset portfolio. Weights drift with prices, and the agent rebalances only when its confidence clears the threshold. It illustrates the core idea of my thesis, not its results.",
   "home.alloc.cta": "Read the thesis",
   "home.alloc.aria":
-    "Animated simulation of five portfolio weights drifting over time, with occasional rebalancing events marked by dashed lines.",
+    "Animated simulation: the agent's confidence rises as five portfolio weights drift, and each time it crosses the threshold the portfolio is rebalanced and confidence drops back.",
   "home.academia.eyebrow": "academia",
   "home.academia.title": "Research",
   "home.academia.cta": "View academic work",
@@ -174,11 +176,13 @@ const es: UIDict = {
   "home.alloc.hold": "mantener",
   "home.alloc.rebalance": "rebalancear",
   "home.alloc.confidence": "confianza",
+  "home.alloc.threshold": "umbral",
+  "home.alloc.weights": "pesos",
   "home.alloc.caption":
     "Una cartera simulada de cinco activos. Los pesos se desvían con los precios y el agente solo rebalancea cuando su confianza supera el umbral. Ilustra la idea central de mi tesis, no sus resultados.",
   "home.alloc.cta": "Leer la tesis",
   "home.alloc.aria":
-    "Simulación animada de cinco pesos de cartera que se desvían con el tiempo, con rebalanceos ocasionales marcados con líneas discontinuas.",
+    "Simulación animada: la confianza del agente sube a medida que se desvían cinco pesos de la cartera y, cada vez que supera el umbral, la cartera se rebalancea y la confianza vuelve a bajar.",
   "home.academia.eyebrow": "academia",
   "home.academia.title": "Investigación",
   "home.academia.cta": "Ver el trabajo académico",
